@@ -11,8 +11,8 @@ Push updates from `templates/` to registered projects via GitHub PRs.
 ## Arguments
 
 - `$ARGUMENTS` should specify what to propagate:
-  - A skill name: `plan`, `implement`, `retro`
-  - A rule name: `feedback-loop`
+  - A skill name: `retro`, `persist-plan`
+  - A rule name: `feedback-loop`, `workflow-conventions`
   - A doc type: `settings`, `process-docs`
   - `all` — compare everything
 - Optionally followed by a target project name. If omitted, propagate to all projects in `registry.yaml`.
@@ -35,7 +35,7 @@ Push updates from `templates/` to registered projects via GitHub PRs.
 
 4. **Compute the diff** and present it to the user:
    - Show what would change in each target project
-   - **Note project-specific customizations** that should be preserved (e.g., health-tool's Step 4.5 code review in implement, project-specific deploy skills)
+   - **Note project-specific customizations** that should be preserved (e.g., project-specific rules, domain skills, custom workflow-conventions)
    - Ask: "Which of these changes should I apply? Any customizations to preserve?"
 
 5. **Wait for user approval** before creating any PRs.

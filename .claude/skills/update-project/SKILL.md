@@ -41,8 +41,8 @@ Compare a project's current Claude setup (skills, rules, settings, doc structure
 
    | Artifact | Status | Details |
    |----------|--------|---------|
-   | skills/plan/SKILL.md | Outdated | Template has updated Phase 3 wording |
-   | skills/retro/SKILL.md | Missing | Project doesn't have retro skill |
+   | skills/retro/SKILL.md | Outdated | Template has broader activation triggers |
+   | skills/persist-plan/SKILL.md | Missing | Project doesn't have persist-plan skill |
    | rules/feedback-loop.md | Current | Matches template |
    | docs/process/process.md | Missing | No process.md in project |
 

@@ -31,10 +31,10 @@ Create a fully set up project from scratch — GitHub repo, Linear project, Clau
    Read each template from `templates/` and customize:
 
    - **`CLAUDE.md`** — from `templates/docs/CLAUDE.md.tmpl`, fill in `{{project_name}}`, `{{project_description}}`, `{{development_setup}}` based on the language/stack
-   - **`.claude/skills/plan/SKILL.md`** — copy from `templates/skills/plan/SKILL.md`
-   - **`.claude/skills/implement/SKILL.md`** — copy from `templates/skills/implement/SKILL.md`
    - **`.claude/skills/retro/SKILL.md`** — copy from `templates/skills/retro/SKILL.md`
+   - **`.claude/skills/persist-plan/SKILL.md`** — copy from `templates/skills/persist-plan/SKILL.md`
    - **`.claude/rules/feedback-loop.md`** — copy from `templates/rules/feedback-loop.md`
+   - **`.claude/rules/workflow-conventions.md`** — copy from `templates/rules/workflow-conventions.md`
    - **`.claude/settings.json`** — from `templates/settings/settings.json`, add language-specific plugins if applicable (e.g., `pyright-lsp` for Python, `typescript-lsp` for TS)
    - **`docs/process/learnings.md`** — from template
    - **`docs/process/retrospective.md`** — from template
@@ -55,7 +55,7 @@ Create a fully set up project from scratch — GitHub repo, Linear project, Clau
    Project created! Next steps:
    1. Clone: git clone git@github.com:fryanpan/{project-name}.git ~/dev/{project-name}
    2. Open in Conductor to start a workspace
-   3. Run /plan to plan your first sprint
+   3. Start planning your first feature (use plan mode for non-trivial work)
    ```
 
 ## Principles

@@ -110,7 +110,7 @@ Projects kicked off by non-technical collaborators (e.g., Joanna) who have domai
 
 2. **Draft Claude config** tailored to their stack:
    - `CLAUDE.md` with project-specific context (architecture, conventions, data flows)
-   - `.claude/skills/` — plan, implement, retro (from templates), plus any role-specific skills (e.g., PM workflow for a product manager)
+   - `.claude/skills/` — retro, persist-plan (from templates), plus any role-specific skills (e.g., PM workflow for a product manager)
    - `.claude/rules/feedback-loop.md`
    - `.claude/settings.json` with plugins matched to their stack:
      - Language-specific: `pyright-lsp`, `typescript-lsp`, etc.
@@ -185,9 +185,9 @@ The technical workflow for engineers is well-understood (Bryan uses it daily). T
    - Defaults to showing working output (deployed URLs, screenshots) over code diffs
    - Claude takes the lead on technical architecture; user focuses on product decisions
 
-4. **Tailored skills** — adapt plan/implement for non-technical users:
-   - `/plan` emphasizes outcomes and user experience over system design
-   - `/implement` has Claude making more autonomous technical decisions, checking in only on product/UX questions
+4. **Tailored rules** — adapt workflow-conventions for non-technical users:
+   - Planning emphasizes outcomes and user experience over system design
+   - Implementation has Claude making more autonomous technical decisions, checking in only on product/UX questions
    - Deploy early and often so they see results fast
 
 5. **Document what works** — after each experiment, run `/retro` and capture what worked for non-technical users specifically. Feed findings back into templates.
