@@ -1,0 +1,86 @@
+# Project Registry
+# Maps project names to their local paths, GitHub repos, and Linear identifiers.
+# The metaproject reads from main worktrees (~/dev/{project}) and proposes changes via GitHub PRs.
+#
+# Project types:
+#   personal  — Bryan owns and develops directly. Full repo access. Changes via PRs.
+#   advisory  — External team Bryan helps adopt Claude Code. May not have repo access.
+#               Changes via config bundles delivered to the team.
+
+projects:
+  health-tool:
+    type: personal
+    path: ~/dev/health-tool
+    repo: fryanpan/health-tool
+    linear:
+      team_id: 01328a7f-d761-4176-8bbf-004a397dc6f7
+      team_key: HEA
+    docs:
+      learnings: docs/process/learnings.md
+      retros: docs/process/retrospective.md
+      decisions: docs/product/decisions.md
+      claude_md: CLAUDE.md
+    skills_dir: .claude/skills
+    rules_dir: .claude/rules
+
+  bike-tool:
+    type: personal
+    path: ~/dev/bike-tool
+    repo: fryanpan/bike-tool
+    linear:
+      team_id: 8bbe24c2-4d5b-4062-b9af-0a33c5c670d2
+      team_key: BIK
+    docs:
+      learnings: docs/process/learnings.md
+      retros: docs/process/retrospective.md
+      decisions: docs/product/decisions.md
+      claude_md: CLAUDE.md
+    skills_dir: .claude/skills
+    rules_dir: .claude/rules
+
+  booster:
+    type: advisory
+    repo: null  # pending access
+    path: null  # pending clone
+    notion:
+      meeting_notes: https://www.notion.so/2fbcadf32a6780c68d77f9ff25e8a9fd
+      kickoff_plan: https://www.notion.so/2ffcadf32a67810dadf5f70aab2bba74
+    team:
+      - name: Ling
+        role: Founder
+        notes: Setup is hard, handoff to team is messy, not new-user friendly
+      - name: Corrie
+        role: PM
+        notes: Antigravity feels smooth, Claude Code had friction, prototyping workflow
+      - name: Josh
+        role: Advisor
+        notes: Good for blank-slate starts, Rust issues with LLMs, finance/trading
+      - name: Luis
+        role: Frontend/Backend
+        notes: Good for larger features, finds bugs, takes a while to understand existing code
+      - name: Chirag
+        role: Backend/AI
+        notes: Multi-model workflow (GPT planning, Claude code), learning from seniors
+      - name: Esau
+        role: Frontend
+        notes: Farthest along with setup, comfortable with big tasks, planning mode
+    stack:
+      languages: [Python, TypeScript]
+      tools:
+        ticketing: null    # TBD
+        docs: Notion
+        ci_cd: null        # TBD
+        repo: null         # TBD — likely GitHub
+        communication: null # TBD
+    engagement:
+      status: proposed
+      goal: "Get engineering team to 2-3x productivity with Claude Code"
+      timeline: "2 weeks, ~2 hours of Bryan's time"
+      success_metrics:
+        - "Corrie & Josh can do easy to moderate features independently"
+        - "SW folks feel 2-3x more PR output per week"
+      needs:
+        - Access to tools / repos
+        - A few minutes from team members (async OK)
+        - Claude Standard Team plan ($20/seat)
+        - One moderately hard ticket to guinea pig the process
