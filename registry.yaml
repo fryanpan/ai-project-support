@@ -4,8 +4,9 @@
 #
 # Project types:
 #   personal  — Bryan owns and develops directly. Full repo access. Changes via PRs.
-#   advisory  — External team Bryan helps adopt Claude Code. May not have repo access.
-#               Changes via config bundles delivered to the team.
+#   advisory  — External team Bryan helps adopt Claude Code. Bryan has repo + tool
+#               access during the engagement. Changes via PRs.
+#   collaborator — Non-technical person's project. Bryan sets up, Claude collaborates.
 
 projects:
   health-tool:

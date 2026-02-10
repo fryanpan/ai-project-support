@@ -15,10 +15,13 @@ Projects Bryan owns and develops directly (e.g., health-tool, bike-tool).
 
 External teams Bryan helps adopt Claude Code workflows (e.g., Booster).
 
-- **Registry entry**: May not have repo access initially. Includes team info, Notion links, engagement goals/timeline
-- **Cross-project changes**: Via config bundles delivered to the team (not PRs)
-- **Reads**: From team's repo once access is granted, or from Notion/docs
-- **Skills used**: `/setup-team` (planned), `/research`, `/new-project` (for initial config)
+- **Registry entry**: Full access — Bryan has repo access and tool access during the engagement. Includes team info, Notion links, engagement goals/timeline.
+- **Cross-project changes**: Via PRs on the team's repo (same as personal projects)
+- **Reads**: From the team's repo (cloned locally)
+- **Skills used**: `/setup-team` (planned), `/research`, `/new-project` (for initial config), `/propagate`, `/update-project`
+- **Two workflows to support**:
+  - **Technical** — for engineers on the team. Bryan knows this workflow well (it's what he uses). Focus on Claude Code config, skills, plugins, subagents, feedback loops.
+  - **Non-technical** — for PMs, founders, advisors who aren't writing code daily. How to get them productive with Claude as a collaborator. This is less proven and needs experimentation.
 
 ### Collaborator Projects
 
@@ -139,25 +142,55 @@ Projects kicked off by non-technical collaborators (e.g., Joanna) who have domai
 
 ---
 
-## Use Case 6: Kick Off a Collaborator Project (e.g., Joanna's idea)
+## Use Case 6: Non-Technical Workflow (Booster: Corrie/Ling, or Joanna)
 
-**Trigger**: A non-technical collaborator has a project idea — e.g., "I want to build a tool that helps homeowners compare solar panel financing options."
+This use case covers two overlapping scenarios:
+- **Advisory**: Non-technical members of a team Bryan is helping (Corrie as PM, Ling as founder)
+- **Collaborator**: Non-technical people kicking off their own projects (Joanna)
 
-**Flow**:
-1. **Conversation to understand the idea** — What problem does it solve? Who's it for? What would "done" look like? What does the collaborator care about (design? data? reach?)
-2. **Bryan runs `/new-project`** — Scaffolds repo, Linear, Claude config. Picks a sensible stack based on the idea (e.g., Next.js for a web tool, Python for data analysis).
-3. **Tailor the CLAUDE.md** for a non-technical collaborator:
-   - Explain technical concepts when they come up
-   - Suggest approaches rather than asking the collaborator to choose between frameworks
-   - Claude takes the lead on technical architecture — collaborator focuses on product decisions
-   - Default to showing working output (screenshots, live URLs) over code diffs
-4. **Tailor skills** for their workflow:
+The technical workflow for engineers is well-understood (Bryan uses it daily). The non-technical workflow is **not yet proven** and needs experimentation.
+
+### Who are the non-technical users?
+
+| Person | Context | What they want to do with Claude |
+|--------|---------|----------------------------------|
+| **Corrie** (Booster PM) | Prototypes features, hands off to eng. Antigravity felt smooth. | Build prototypes, iterate on UX, hand working code to engineers |
+| **Ling** (Booster founder) | Setup is hard, feels like getting 50% of value. | Oversee product direction, occasionally build things, set up team |
+| **Joanna** (collaborator) | Domain expert (energy, housing, policy). Some Stanford CS 20 years ago. | Turn ideas into working tools — web apps, data analysis, prototypes |
+
+### What we know works (for technical users)
+- Plan mode → implement → retro cycle
+- CLAUDE.md with architecture context
+- Skills that structure the workflow
+- Feedback loops that compound gains
+
+### What we don't know (for non-technical users)
+- **What's the right entry point?** Conductor? Claude Desktop? Something else?
+- **How much technical context should Claude explain?** Too much is overwhelming, too little leaves them confused
+- **What decisions should Claude make autonomously?** Technical architecture, framework choice, deployment — probably yes. Product/UX decisions — probably not.
+- **What does "plan mode" look like for a PM?** They think in features and user stories, not chunks and interfaces
+- **How do you onboard someone who isn't comfortable with git/terminal?** Conductor helps but there's still a learning curve
+- **What does the feedback loop look like?** Retro skill assumes some technical context in the transcript
+- **How do you handle the handoff?** PM builds prototype → engineer takes over. What does that git workflow look like?
+
+### What to try first (experiments)
+
+1. **Corrie on Booster** — have her try building a small feature end-to-end with Claude Code (via Conductor). Observe what's confusing, what works. This is the fastest feedback loop since she's already building things with Antigravity.
+
+2. **Joanna on a side project** — pick one of her ideas, scaffold it with `/new-project`, walk through the first feature together. See where she gets stuck.
+
+3. **Tailored CLAUDE.md** — write a version that:
+   - Explains technical concepts when they come up
+   - Has Claude suggest approaches rather than asking the user to choose between frameworks
+   - Defaults to showing working output (deployed URLs, screenshots) over code diffs
+   - Claude takes the lead on technical architecture; user focuses on product decisions
+
+4. **Tailored skills** — adapt plan/implement for non-technical users:
    - `/plan` emphasizes outcomes and user experience over system design
-   - `/implement` has Claude making more autonomous technical decisions, checking in on product/UX questions
-   - Lower the barrier to "just try it" — deploy early and often so they can see results
-5. **Set up Conductor or Claude Desktop** — not CLI. One-click to open, visual workspace.
-6. **Handoff** — Walk through the first feature together, then the collaborator can continue with Claude independently.
-7. **Ongoing** — Bryan periodically runs `/update-project` to push improvements to their config, `/aggregate` to see how it's going.
+   - `/implement` has Claude making more autonomous technical decisions, checking in only on product/UX questions
+   - Deploy early and often so they see results fast
+
+5. **Document what works** — after each experiment, run `/retro` and capture what worked for non-technical users specifically. Feed findings back into templates.
 
 ---
 
