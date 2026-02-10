@@ -1,6 +1,6 @@
 # Use Cases
 
-## Two Project Types
+## Three Project Types
 
 ### Personal Projects
 
@@ -19,6 +19,20 @@ External teams Bryan helps adopt Claude Code workflows (e.g., Booster).
 - **Cross-project changes**: Via config bundles delivered to the team (not PRs)
 - **Reads**: From team's repo once access is granted, or from Notion/docs
 - **Skills used**: `/setup-team` (planned), `/research`, `/new-project` (for initial config)
+
+### Collaborator Projects
+
+Projects kicked off by non-technical collaborators (e.g., Joanna) who have domain expertise and ideas but aren't day-to-day programmers. Bryan helps with initial setup; Claude becomes their primary collaborator.
+
+- **Registry entry**: Full access (Bryan sets up the repo). Includes collaborator context (domain expertise, preferences, what they're comfortable with)
+- **Who they are**: Smart, creative people with domain expertise (energy, housing, policy, design, etc.) who did some programming years ago or have light technical exposure. They think in problems and solutions, not frameworks and APIs.
+- **What they need from the metaproject**:
+  - `/new-project` scaffolds everything so they don't have to think about repo setup, CI, tooling
+  - CLAUDE.md written to orient Claude for a non-technical collaborator (explain more, suggest approaches, don't assume familiarity with dev tooling)
+  - Skills tuned for their workflow — more conversational planning, more guardrails, Claude takes the lead on technical decisions
+  - Lower-friction onboarding — Conductor or Claude Desktop rather than CLI
+- **Ongoing support**: Bryan can use `/update-project` to push improvements, check in via `/aggregate` to see how the project is going
+- **Skills used**: `/new-project`, `/update-project`, `/research`
 
 ---
 
@@ -125,7 +139,29 @@ External teams Bryan helps adopt Claude Code workflows (e.g., Booster).
 
 ---
 
-## Use Case 6: Update an Existing Project
+## Use Case 6: Kick Off a Collaborator Project (e.g., Joanna's idea)
+
+**Trigger**: A non-technical collaborator has a project idea — e.g., "I want to build a tool that helps homeowners compare solar panel financing options."
+
+**Flow**:
+1. **Conversation to understand the idea** — What problem does it solve? Who's it for? What would "done" look like? What does the collaborator care about (design? data? reach?)
+2. **Bryan runs `/new-project`** — Scaffolds repo, Linear, Claude config. Picks a sensible stack based on the idea (e.g., Next.js for a web tool, Python for data analysis).
+3. **Tailor the CLAUDE.md** for a non-technical collaborator:
+   - Explain technical concepts when they come up
+   - Suggest approaches rather than asking the collaborator to choose between frameworks
+   - Claude takes the lead on technical architecture — collaborator focuses on product decisions
+   - Default to showing working output (screenshots, live URLs) over code diffs
+4. **Tailor skills** for their workflow:
+   - `/plan` emphasizes outcomes and user experience over system design
+   - `/implement` has Claude making more autonomous technical decisions, checking in on product/UX questions
+   - Lower the barrier to "just try it" — deploy early and often so they can see results
+5. **Set up Conductor or Claude Desktop** — not CLI. One-click to open, visual workspace.
+6. **Handoff** — Walk through the first feature together, then the collaborator can continue with Claude independently.
+7. **Ongoing** — Bryan periodically runs `/update-project` to push improvements to their config, `/aggregate` to see how it's going.
+
+---
+
+## Use Case 7: Update an Existing Project
 
 **Trigger**: Templates have been improved and a project is behind.
 
