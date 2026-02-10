@@ -41,6 +41,16 @@ After ~2-3 hours of work or completing a major feature, prompt:
 
 Then offer to log feedback in `docs/process/retrospective.md`
 
+## Automatic Retro Triggers
+
+After any of these events, if a retro hasn't happened yet this session, offer to run `/retro`:
+- Creating a PR (via `/commit-push-pr` or `gh pr create`)
+- Receiving and addressing code review feedback
+
+Lightweight prompt: "Good moment for a quick retro. Want me to run `/retro`?"
+Do NOT auto-run — just offer. User can decline.
+If a retro already happened this session, skip the offer.
+
 ## Elevating to Learnings
 
 During retros or after fixing issues, actively look for things that should change future Claude behavior:
