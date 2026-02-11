@@ -10,3 +10,18 @@ Technical discoveries that should persist across sessions.
 
 ## Retros
 - Don't use AskUserQuestion for retro feedback. Just pose the questions as plain text in the conversation and let the user type naturally. Structured question tools feel like a survey and force the user to answer everything at once.
+
+## Project Reviews
+- Lead with findings, not recommendations. The most interesting thing is what we learned about the team, not what we think they should do.
+- Don't invent jargon ("feature chains") — use plain language ("features") and define terms when needed.
+- Be less certain in tone when proposing changes — "worth trying" not "this will work." We're proposing things to try, not prescribing solutions.
+- Check existing infrastructure before proposing new things. The Booster backend already had `make test-base` with ~150-200 non-DB tests — proposing a new `tests/fast/` directory was unnecessary.
+- Bryan's reorganized Booster Review Notes page is a good template: How We Reviewed → Key Findings → What They Already Have → Proposed Workflow → How To Make It Work → Detailed Notes (subpages).
+
+## Notion MCP
+- `allow_deleting_content: true` on `replace_content` will archive child pages that were embedded in the old content. This is destructive and hard to undo — user had to manually restore pages from Notion trash. Avoid this flag; use `replace_content_range` or `insert_content_after` instead.
+- When replacing content on a page with child pages, always preserve `<page url="...">` tags in the new content to avoid archiving them.
+
+## Working with Users
+- When the user says "set up X for the team," they often mean adoption guidance (how to install, how to use), not config files to commit. Ask which they mean if ambiguous.
+- Short, direct user corrections ("don't bury the lede", "stop mentioning feature chains") are the most productive feedback. Don't over-explain in response — just fix it.

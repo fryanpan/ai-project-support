@@ -35,6 +35,46 @@ Session retrospectives and process improvements.
 | Template consistency at scale | Ticket | PRJ-4: Investigate consistency checks for template changes |
 | Propagation scalability | Ticket | PRJ-5: Evaluate propagation scalability as project count grows |
 
+## 2026-02-10/11 - Booster initial project review
+
+### Time Breakdown
+| Phase | Duration | User Involvement | Challenges |
+|-------|----------|------------------|------------|
+| Setup & access verification | 14m | Light — 3 msgs | Token troubleshooting for Notion MCP |
+| Repo review & team analysis | 22m | Medium — 4 msgs | Reading 3 repos + GitHub PRs + Notion board |
+| PR duration & developer deep dive | 28m | Medium — 4 msgs | Commit span analysis across 142 PRs |
+| Team workflow & layering analysis | 44m | Light — 3 msgs | 20 tool calls, heavy GitHub API + Notion fetches |
+| Notion notes & parallel work | 47m | Medium — 4 msgs | Writing findings to multi-page Notion structure |
+| Feature grouping & subpages | 53m | Medium — 4 msgs | Grouping 142 PRs into 13 features with FTE breakdowns |
+| Recommendations & template review | 35m | Light — 3 msgs | Reviewing all metaproject templates for patterns |
+| Implementation plan & research | 28m | Heavy — 5 msgs | Antigravity + Conductor research, user corrections on intent |
+| Recommendations rewrite (4 rounds) | 43m | Heavy — 4 msgs | Iterative refinement based on user feedback |
+
+**Totals:** ~5h 17m active (25h wall-clock with overnight), ~1.5-2h user hands-on, ~3-3.5h automated, 36 user messages, 123 tool calls
+
+### Key Observations
+- Research agents (Antigravity, Conductor, backend tests) each returned comprehensive findings in ~3 min — high leverage
+- Feature grouping analysis (142 PRs → 13 features) produced the most compelling insight
+- Recommendations page needed 4 rewrites to get right — initial versions buried the lede, used jargon, were too certain in tone
+- Notion `allow_deleting_content: true` archived child pages unexpectedly — user had to restore from trash
+- Assumed backend needed new fast tests; team already had `make test-base` with ~150-200 non-DB tests
+- Wrote Conductor WP as "config files to create" when user meant "teach the team to install and use it"
+- Two context continuations hit during the session — summary was good enough to resume but some early detail was lost
+
+### Feedback
+**What worked:** Multi-page Notion structure, research agents for external tools, feature grouping analysis, user's reorganized review page structure
+**What didn't:** Over-building before checking existing state (backend tests, Conductor), recommendations needed multiple rewrites to match user's communication style, Notion archiving gotcha
+
+### Actions Taken
+| Issue | Action Type | Change |
+|-------|-------------|--------|
+| Recommendations went through 4 rewrites | Update learnings | Lead with findings, be brief, don't invent jargon |
+| Notion archiving gotcha | Update learnings | Document `allow_deleting_content` risk |
+| Assumed new tests needed vs checking existing | Update learnings | Check existing infra before proposing new |
+| Booster review page structure is reusable | Create template | Save review page structure as a skill/template |
+| No `/review` skill exists | Create skill | Build a project review skill based on this session |
+| Booster implementation work | Create ticket | PRJ-6: Implement Booster project setup + test workflow |
+
 ## 2026-02-10 - Multi-ticketing design doc + ticket
 
 ### Time Breakdown
