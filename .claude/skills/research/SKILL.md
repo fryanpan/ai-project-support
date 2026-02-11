@@ -38,12 +38,14 @@ When invoked without a specific topic (or with `watchlist`), research these area
    - **Effort to adopt** — what would need to change (S/M/L)
    - **Source URLs** — links to the original content
 
-4. **Assess actionability**: For each finding that could improve our projects:
+4. **Commit** the research file with message: `research: [topic slug] findings`
+
+5. **Assess actionability**: For each finding that could improve our projects:
    - Note which projects would benefit
    - Describe what would need to change (skill update, new tool, workflow change)
    - Rate priority (do now / explore later / watch)
 
-5. **Summarize** for the user:
+6. **Summarize** for the user:
    - Key findings and what's worth acting on
    - Recommend specific `/propagate` actions if applicable
    - Flag anything that needs user decision (e.g., "Should we try tool X on bike-tool?")

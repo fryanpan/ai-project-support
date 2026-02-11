@@ -36,6 +36,17 @@ Project-specific conventions that guide how superpowers plugin skills behave in 
 - After tests pass, run a code review before presenting results to the user
 - Fix issues found by the reviewer before handoff
 
+## Commit Discipline
+
+Commit early and often to create an incremental record. Key checkpoints:
+
+- **After planning**: Once the plan is written to `docs/product/plans/`, commit it
+- **After implementation**: Before requesting review, organize work into logical, digestible commits — each commit should represent one coherent change (a feature, a test suite, a refactor). Don't lump everything into one giant commit
+- **After code review**: Commit review fixes as separate commit(s) so the review trail is visible
+- **After retro/learnings updates**: Commit changes to `docs/process/` files
+
+Use descriptive commit messages that explain *why*, not just *what*.
+
 ## Diagrams
 
 - Use mermaid for all diagrams (architecture, workflows, dependencies)

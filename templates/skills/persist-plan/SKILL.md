@@ -25,7 +25,9 @@ Save the current plan from `.claude/plans/` to the project's permanent docs fold
 
 3. **Copy to docs.** Write the plan content to `docs/product/plans/<filename>`. If the file already exists, ask before overwriting.
 
-4. **Confirm.** Tell the user where the plan was saved.
+4. **Commit** the plan file with message: `docs: persist plan for [ticket-id or context]`
+
+5. **Confirm.** Tell the user where the plan was saved.
 
 ## Notes
 

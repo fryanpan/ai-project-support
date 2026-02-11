@@ -134,4 +134,6 @@ For the last two triggers, use a lightweight prompt: "Good moment for a quick re
 
    Don't just ask "anything to add?" - identify candidates yourself.
 
-9. **Confirm** what was logged and what actions were taken.
+9. **Commit** all retro changes (actions, retrospective log, learnings) with message: `docs: retro for [brief context]`
+
+10. **Confirm** what was logged and what actions were taken.

@@ -54,6 +54,8 @@ Push updates from `templates/` to registered projects via GitHub PRs.
    - PR URLs
    - Any customizations that were preserved
 
+8. **Commit** the applied log with message: `docs: log propagation of [artifact] to [projects]`
+
 ## Principles
 
 - **Never force-update.** Always show the diff and get approval first.
