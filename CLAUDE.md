@@ -9,7 +9,7 @@ Cross-project management tool that reviews, improves, and scaffolds other projec
 ### Project Registry
 `registry.yaml` maps each managed project to its local path, GitHub repo, and Linear team. The metaproject reads from main worktrees (`~/dev/{project}`) using absolute filesystem paths.
 
-**Before reading from a project**, check freshness: `git -C <path> log --oneline -1` to see the last commit. If stale, `git -C <path> fetch` and compare with `origin/main`.
+**Before reading from a project**, ensure freshness: `git -C <path> pull --ff-only` to update to latest origin/main. If pull fails (dirty worktree or diverged history), investigate before reading.
 
 ### Cross-Project Changes
 Never edit files in other project repos directly. Always propose changes via GitHub PRs using `mcp__github__push_files` + `mcp__github__create_pull_request`, or `gh pr create --repo <repo>`.

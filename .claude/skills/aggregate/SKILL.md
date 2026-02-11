@@ -11,9 +11,9 @@ Pull learnings and retro insights from all projects in `registry.yaml` into `kno
 
 1. **Read `registry.yaml`** to get the list of managed projects with their paths.
 
-2. **Check freshness** of each project's main worktree:
-   - Run `git -C <path> log --oneline -1` to see the last commit date
-   - If more than 24 hours behind, run `git -C <path> fetch` and note the discrepancy
+2. **Ensure freshness** of each project's main worktree:
+   - Run `git -C <path> pull --ff-only` to update to latest origin/main
+   - If pull fails (dirty worktree, non-ff), warn the user and note the discrepancy
    - Report freshness status to the user before proceeding
 
 3. **For each project**, read:

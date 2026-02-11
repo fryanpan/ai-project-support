@@ -2,6 +2,41 @@
 
 Session retrospectives and process improvements.
 
+## 2026-02-11 - Propagate commit discipline conventions
+
+### Time Breakdown
+| Phase | Duration | User Involvement | Challenges |
+|-------|----------|------------------|------------|
+| Initial exploration | 3 min | None — automated | Read stale project repos |
+| User interrupt + redirect | 0.6 min | High — user caught staleness bug | — |
+| Planning freshness fix | 1.5 min | User-directed | — |
+| Implementing freshness fix | 1.3 min | None — automated | Edit tool required re-reads; step renumbering tedious |
+| Computing propagation diffs | 1.2 min | None — automated | — |
+| User reviews diff + decides strategy | 5.3 min | High — chose worktree approach | — |
+| Creating worktrees, changes, PRs | 15 min | None — automated | Health-tool customizations nearly clobbered |
+| User review + /retro | 9.4 min | Idle/review | — |
+
+**Totals:** 38 min wall-clock, 6 min user hands-on, 22 min automated, 10 min idle
+
+### Key Observations
+- Agent read from stale project repos despite CLAUDE.md freshness guidance — user had to interrupt and redirect
+- Propagation subagent replaced health-tool's workflow-conventions wholesale, nearly clobbering 3 project-specific lines — caught during diff review
+- Worktree workflow (create, edit, commit, push, PR, cleanup) was clean once established
+- Step renumbering when inserting into numbered lists required 3-4 cascading edits
+
+### Feedback
+**What worked:** Worktree-based propagation, bundling changes per project, catching customization clobbering during review
+**What didn't:** Agent didn't self-enforce freshness; propagation nearly lost project-specific lines
+
+### Actions Taken
+| Issue | Action Type | Change |
+|-------|-------------|--------|
+| Stale repo reads | Update skills | Added `git pull --ff-only` step to propagate, aggregate, update-project skills + CLAUDE.md |
+| Customization clobbering | Update propagate skill | Added guidance to diff existing files and apply only additions |
+| Worktree + bundling convention | Update propagate skill | Changed from one-PR-per-artifact to one-PR-per-project with worktrees |
+| Step renumbering friction | Update learnings | Added note about renumbering in a single edit |
+| Propagation conventions | Update learnings | Added notes about worktrees, bundling, and diffing before writing |
+
 ## 2026-02-10 - PRJ-2: Streamline and document workflow
 
 ### Time Breakdown

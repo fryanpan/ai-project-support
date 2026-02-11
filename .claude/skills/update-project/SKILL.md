@@ -14,7 +14,11 @@ Compare a project's current Claude setup (skills, rules, settings, doc structure
    - If `$ARGUMENTS` is provided, look it up in `registry.yaml`
    - If not, list all projects from `registry.yaml` and ask the user which one to update
 
-2. **Read the project's current setup** from its main worktree path:
+2. **Ensure freshness** of the project's main worktree:
+   - Run `git -C <path> pull --ff-only` to update to latest origin/main
+   - If pull fails, warn the user and ask whether to proceed with stale data
+
+3. **Read the project's current setup** from its main worktree path:
    - `.claude/skills/` — list all skills, read each SKILL.md
    - `.claude/rules/` — list all rules, read each
    - `.claude/settings.json` — read current plugins and permissions
@@ -22,14 +26,14 @@ Compare a project's current Claude setup (skills, rules, settings, doc structure
    - `docs/process/` — check which process docs exist
    - `docs/product/` — check which product docs exist
 
-3. **Read the latest templates** from `templates/`:
+4. **Read the latest templates** from `templates/`:
    - `templates/skills/*/SKILL.md`
    - `templates/rules/*.md`
    - `templates/settings/settings.json`
    - `templates/docs/process/*.md`
    - `templates/docs/product/*.md`
 
-4. **Generate a comparison report**:
+5. **Generate a comparison report**:
 
    For each artifact, classify as:
    - **Missing** — template exists but project doesn't have it
@@ -46,16 +50,16 @@ Compare a project's current Claude setup (skills, rules, settings, doc structure
    | rules/feedback-loop.md | Current | Matches template |
    | docs/process/process.md | Missing | No process.md in project |
 
-5. **Ask the user** which updates to apply. For outdated items, show the diff and ask if project-specific customizations should be preserved.
+6. **Ask the user** which updates to apply. For outdated items, show the diff and ask if project-specific customizations should be preserved.
 
-6. **Create PRs** for approved updates using `/propagate` workflow:
+7. **Create PRs** for approved updates using `/propagate` workflow:
    - Branch: `project-support/update-{project}-{date}`
    - One PR per project with all approved changes bundled
    - PR body lists each change with rationale
 
-7. **Update `registry.yaml`** if any project metadata changed (new docs paths, etc.)
+8. **Update `registry.yaml`** if any project metadata changed (new docs paths, etc.)
 
-8. **Commit** updated `registry.yaml` (if changed) with message: `registry: update [project] metadata`
+9. **Commit** updated `registry.yaml` (if changed) with message: `registry: update [project] metadata`
 
 ## Principles
 
