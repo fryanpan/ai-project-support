@@ -38,7 +38,9 @@ Pull learnings and retro insights from all projects in `registry.yaml` into `kno
    - Which projects it was observed in
    - Whether it should be propagated (and how — skill update, CLAUDE.md update, etc.)
 
-7. **Summarize** what was aggregated:
+7. **Commit** the updated `knowledge/` files with message: `knowledge: aggregate learnings from [N] projects`
+
+8. **Summarize** what was aggregated:
    - How many new entries from each project
    - Any cross-cutting patterns identified
    - Recommendations for `/propagate` actions

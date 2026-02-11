@@ -83,6 +83,8 @@ Only run this skill when:
 
 8. **Elevate to learnings**: Propose additions to `docs/process/learnings.md`.
 
-9. **Check template impact**: If any learnings should affect templates (and thus all projects), note them and suggest running `/propagate`.
+9. **Commit** all retro changes (actions, retrospective log, learnings) with message: `docs: retro for [context]`
 
-10. **Confirm** what was logged.
+10. **Check template impact**: If any learnings should affect templates (and thus all projects), note them and suggest running `/propagate`.
+
+11. **Confirm** what was logged.

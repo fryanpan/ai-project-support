@@ -55,6 +55,8 @@ Compare a project's current Claude setup (skills, rules, settings, doc structure
 
 7. **Update `registry.yaml`** if any project metadata changed (new docs paths, etc.)
 
+8. **Commit** updated `registry.yaml` (if changed) with message: `registry: update [project] metadata`
+
 ## Principles
 
 - **Respect project autonomy.** Show diffs, get approval, preserve customizations.
