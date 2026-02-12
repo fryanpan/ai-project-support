@@ -2,6 +2,46 @@
 
 Session retrospectives and process improvements.
 
+## 2026-02-12 - Retro format redesign
+
+### Time Breakdown
+| Started | Phase | 👤 Hands-On Time | 🤖 Agent Time | Problems |
+|---------|-------|-----------------|---------------|----------|
+| Feb 11 8:11pm | Plan (explored formats, proposed 4 options, iterated to final design) | ███ 5m | ██ 3m | |
+| Feb 12 5:20am | Build (edited 2 retro skills, tested /retro, simplified to Started column) | ███ 5m | ████ 8m | ⚠ subagent transcript analysis rejected as too slow |
+| Feb 12 5:33am | Test (built Python script, compared script vs agent approach) | █ 2m | ████ 8m | |
+| Feb 12 5:48am | Review (decided agent-only, added tracking + brevity rules, updated examples) | ████ 7m | █ 2m | |
+
+(each █ ≈ 2min)
+
+### Metrics
+| Metric | Duration |
+|--------|----------|
+| Total wall-clock | 9.8h (mostly overnight) |
+| Active time | ~35min across 5 bursts |
+| Hands-on | ~19min (54% of active) |
+| Agent time | ~21min (46% of active) |
+| Idle/away | ~9h 11min (94% of wall-clock) |
+| Retro analysis time | ~3min |
+
+### Key Observations
+- Design iteration was efficient — 3 rounds of format feedback in 7 minutes, user drove decisions quickly
+- Testing the actual retro skill surfaced simplifications (removed Stage column in favor of Started timestamp) that plan mode alone wouldn't have caught
+- Python script experiment was a useful dead end — explored and decided in ~15 minutes rather than assuming
+- Retro analysis took ~3min for a 220-line transcript — worth tracking on longer sessions
+
+### Feedback
+**What worked:** Rapid iteration on format proposals, testing the skill live to validate, honest evaluation of script vs agent
+**What didn't:** Initial subagent transcript analysis attempt was too slow/heavyweight for a simple test
+
+### Actions Taken
+| Issue | Action Type | Change |
+|-------|-------------|--------|
+| Retro table hard to scan | Update template + metaproject skill | New format: Started / Phase / Hands-On Time / Agent Time / Problems with proportional bars |
+| Too many rows in retros | Update template + metaproject skill | Added brevity rule: 10 rows max, high-level phases with parenthetical detail |
+| No tracking of retro analysis speed | Update template + metaproject skill | Added "Retro analysis time" metric and instruction to note start time |
+| Script experiment | No action needed | Decided agent-only for now; will revisit if analysis time becomes a bottleneck |
+
 ## 2026-02-11 - Propagate commit discipline conventions
 
 ### Time Breakdown

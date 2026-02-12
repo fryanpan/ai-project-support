@@ -13,25 +13,35 @@ Only run this skill when:
 
 ## Steps
 
-1. **Session time analysis**: Read the actual conversation transcript JSONL file to extract real timestamps and produce a time breakdown. Do NOT estimate or guess times from memory.
+1. **Session time analysis**: Read the actual conversation transcript JSONL file to extract real timestamps and produce a time breakdown. Do NOT estimate or guess times from memory. Note the current time before starting — you'll record how long this analysis took in the retro log.
 
    **How to read the transcript:**
    - The transcript is at: `~/.claude/projects/<project-path>/<session-id>.jsonl`
    - Find the correct path by globbing `~/.claude/projects/**/*.jsonl` sorted by modification time
    - Use a subagent (Task tool with `general-purpose` type) to read the JSONL file, extract timestamps, and calculate durations
 
-   Present as a phase table:
+   Present as a time breakdown table with proportional bars and a metrics summary:
 
-   | Phase | Duration | User Involvement | Challenges |
-   |-------|----------|------------------|------------|
+   | Started | Phase | 👤 Hands-On Time | 🤖 Agent Time | Problems |
+   |---------|-------|-----------------|---------------|----------|
+   | Feb 10 10:00am | Build (engine restart, voice recog, UI tweaks) | ██████ 60m | ███ 30m | ⚠ 5 fix cycles |
+   | Feb 10 11:30am | Research (BT routing for AirPods + external mics) | | █████ 45m | |
+   | Feb 10 1:00pm | Review (code review, docs, feedback log) | | ██ 15m | |
 
-   And a summary:
+   **Format rules:**
+   - **Started**: Date and wall-clock time when the phase began (from transcript timestamps)
+   - **Bars**: Use █ blocks proportional to time (each █ ≈ 10min), followed by the minute label (e.g., `███ 30m`)
+   - **Empty cells**: Leave the column blank if that role wasn't involved in the phase
+   - **Problems**: Inline with ⚠ marker — only for phases that had real friction or rework
+   - **Sort**: Chronological (by start time)
+   - **Brevity**: Keep the table to 10 rows max. Start with high-level phases (plan, build, test, review) and only split a phase into sub-rows if it was long and had distinct chunky subparts. A 4-row table is better than a 12-row table. Include a brief parenthetical after the label explaining what was in the phase, e.g., "Build (edited 2 retro skills, tested format)" not just "Build".
 
    | Metric | Duration |
    |--------|----------|
-   | Total wall-clock | X min |
-   | User hands-on | X min |
-   | Automated agent time | X min |
+   | Total wall-clock | X hours |
+   | Hands-on | X hours (Y%) |
+   | Automated agent time | X hours (Y%) |
+   | Idle/testing/away | X hours (Y%) |
 
 2. **Key observations**: Before asking the user, identify patterns:
    - Which cross-project operations went smoothly?
@@ -64,10 +74,18 @@ Only run this skill when:
    ## YYYY-MM-DD - [Brief context]
 
    ### Time Breakdown
-   | Phase | Duration | User Involvement | Challenges |
-   |-------|----------|------------------|------------|
+   | Started | Phase | 👤 Hands-On Time | 🤖 Agent Time | Problems |
+   |---------|-------|-----------------|---------------|----------|
+   | ... | ... | ... | ... | ... |
 
-   **Totals:** X min wall-clock, X min user hands-on, X min automated
+   ### Metrics
+   | Metric | Duration |
+   |--------|----------|
+   | Total wall-clock | X hours |
+   | Hands-on | X hours (Y%) |
+   | Automated agent time | X hours (Y%) |
+   | Idle/testing/away | X hours (Y%) |
+   | Retro analysis time | X min |
 
    ### Key Observations
    - [Patterns from transcript]

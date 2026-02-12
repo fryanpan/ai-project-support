@@ -53,15 +53,16 @@ Push updates from `templates/` to registered projects via GitHub PRs.
      - Title: `[project-support] {brief description of changes}`
      - Body: Lists each change with rationale, notes preserved customizations
    - Clean up the worktree: `git -C <project-path> worktree remove <worktree-path>`
-   - Report the PR URL to the user
 
-8. **Log to `research/applied/`**: Create `research/applied/{YYYY-MM-DD}-propagate-{artifact}.md` with:
+8. **Open all PRs for review**: After all PRs are created, open each PR URL in the browser using `open <url>` so the user can review them.
+
+9. **Log to `research/applied/`**: Create `research/applied/{YYYY-MM-DD}-propagate-{artifact}.md` with:
    - What was propagated
    - Which projects received PRs
    - PR URLs
    - Any customizations that were preserved
 
-9. **Commit** the applied log with message: `docs: log propagation of [artifact] to [projects]`
+10. **Commit** the applied log with message: `docs: log propagation of [artifact] to [projects]`
 
 ## Principles
 
