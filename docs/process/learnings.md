@@ -11,6 +11,9 @@ Technical discoveries that should persist across sessions.
 ## Skill Editing
 - When inserting a step into a numbered skill list, renumber all subsequent steps in a single edit rather than one-at-a-time — cascading individual edits are error-prone and slow
 
+## Project Setup
+- When setting up new projects, do the work in the main thread using this repo's templates and skills — don't delegate to subagents. Subagents can't access project skills (`/propagate`, `/new-project`, `/update-project`), struggle with cross-repo file access, and end up reinventing what the skills already do.
+
 ## Propagation
 - Always use worktrees when making changes to target projects — never edit the main worktree directly
 - Bundle all related changes into one commit and one PR per project, not one per artifact
