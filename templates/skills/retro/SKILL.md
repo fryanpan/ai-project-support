@@ -19,7 +19,8 @@ For the last two triggers, use a lightweight prompt: "Good moment for a quick re
 
    **How to read the transcript:**
    - The transcript is at: `~/.claude/projects/<project-path>/<session-id>.jsonl`
-   - Find the correct path by checking the context compaction summary (which includes the file path) or by globbing `~/.claude/projects/**/*.jsonl` sorted by modification time
+   - Find the correct path: the project directory path determines the subfolder under `~/.claude/projects/`. Convert the current working directory to the Claude projects path format (slashes become dashes, e.g., `/Users/me/myproject` → `-Users-me-myproject`), then glob for `~/.claude/projects/<converted-path>/*.jsonl` sorted by modification time. Only fall back to globbing all `~/.claude/projects/**/*.jsonl` if no match is found.
+   - **Verify before proceeding**: Read the first few lines of the JSONL file and confirm it contains messages about work done in this project. If the transcript doesn't match (e.g., it's from a different worktree), try the next most recent file or report that the transcript couldn't be found.
    - Use a subagent (Task tool with `general-purpose` type) to read the JSONL file, extract timestamps from each JSON object, and calculate durations between phases
    - Each line is a JSON object — look for timestamp fields (`timestamp`, `ts`, `createdAt`, or similar) and role fields (`user`/`human` vs `assistant`) to identify who was active when
 
@@ -70,7 +71,13 @@ For the last two triggers, use a lightweight prompt: "Good moment for a quick re
 
 5. **Propose concrete actions**: For each issue identified (from your observations in Step 2 AND the user's feedback in Step 4), investigate the right action and propose a specific deliverable.
 
-   **5a. Launch CLAUDE.md review in parallel.** While investigating actions below, invoke the `/claude-md-improver` skill (via the Skill tool) with the key observations from Step 2 and the user's feedback from Step 4 as context. This runs in parallel with 5b — don't wait for it to finish before starting your own action investigations.
+   **5a. Launch CLAUDE.md review in parallel.** While investigating actions below, launch a Task agent (`general-purpose` type) to audit CLAUDE.md. In the prompt, include your key observations from Step 2 and the user's feedback from Step 4. The agent should:
+   - Glob for all `**/CLAUDE.md` files in the project
+   - Read each one and evaluate whether any sections need additions or updates based on the session observations and feedback you provided
+   - Return specific proposed edits (section + exact change), not vague suggestions
+   - If nothing needs changing, say so
+
+   Call this Task in the same message as your first tool calls for 5b — they'll run in parallel naturally. Do NOT use `run_in_background`.
 
    **5b. Investigate actions for each issue.** Each action must be one of these types:
 

@@ -2,6 +2,41 @@
 
 Session retrospectives and process improvements.
 
+## 2026-02-13 - Fix retro CLAUDE.md audit + transcript finder
+
+### Time Breakdown
+| Started | Phase | 👤 Hands-On Time | 🤖 Agent Time | Problems |
+|---------|-------|-----------------|---------------|----------|
+| Feb 12 6:36am | Explore (branch rename, read retro/template/settings files) | | ██ 2m | |
+| Feb 12 6:38am | Plan (root cause analysis, write plan) | █ 1m review | ██ 2m | ⚠ Plan mode unnecessary for single-edit fix |
+| Feb 12 6:41am | Build (edit template Step 5a, verify) | | < 1m | |
+| Feb 13 12:23pm | Retro attempt 1 (transcript analysis) | | ███ 3m | ⚠ Analyzed wrong session (montgomery, not amman) |
+| Feb 13 4:54pm | Retro attempt 2 + actions | █ 2m | ███ 3m | |
+
+### Metrics
+| Metric | Duration |
+|--------|----------|
+| Total wall-clock (active) | ~12m |
+| Hands-on | ~3m (25%) |
+| Automated agent time | ~10m (75%) |
+| Idle/testing/away | ~34h (cross-day gaps) |
+| Retro analysis time | ~6m (2 attempts) |
+
+### Key Observations
+- Template retro skill Step 5a told the agent to invoke `/claude-md-improver` via the Skill tool "in parallel" — this is fundamentally broken because the Skill tool is synchronous
+- Retro transcript finder globbed all `**/*.jsonl` sorted by recency, which picks up whatever worktree was most recently active — not necessarily the current project
+- Agent recognized the wrong transcript but presented it anyway instead of flagging the error
+
+### Feedback
+**What worked:** Root cause analysis was fast and accurate, fix was minimal and targeted
+**What didn't:** Retro grabbed wrong session transcript; plan mode was overkill for a single-edit fix
+
+### Actions Taken
+| Issue | Action Type | Change |
+|-------|-------------|--------|
+| CLAUDE.md audit silently failing | Update template skill | Step 5a: replaced Skill tool invocation with direct Task agent instructions |
+| Transcript finder picks wrong project | Update template + metaproject skill | Filter by project path segment before falling back to global glob; added verification step |
+
 ## 2026-02-12 - Retro format redesign
 
 ### Time Breakdown

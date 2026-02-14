@@ -18,6 +18,8 @@ Technical discoveries that should persist across sessions.
 
 ## Retros
 - Don't use AskUserQuestion for retro feedback. Just pose the questions as plain text in the conversation and let the user type naturally. Structured question tools feel like a survey and force the user to answer everything at once.
+- The transcript finder must filter by project path, not just recency. With multiple Conductor worktrees running in parallel, globbing all `**/*.jsonl` by modification time will pick up the wrong session.
+- The Skill tool is synchronous — it can't run "in parallel" or "in the background." To run skill-like work in parallel, use a Task agent with explicit instructions instead.
 
 ## Project Reviews
 - Lead with findings, not recommendations. The most interesting thing is what we learned about the team, not what we think they should do.
