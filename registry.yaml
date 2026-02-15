@@ -39,13 +39,41 @@ projects:
     skills_dir: .claude/skills
     rules_dir: .claude/rules
 
-  booster:
+  booster-frontend:
     type: advisory
-    repo: null  # pending access
-    path: null  # pending clone
+    path: ~/dev/crabgrass-frontend
+    repo: GoManzanas/crabgrass-frontend
     notion:
+      board: https://www.notion.so/2d534930420e805f8baac2eac14ccd13
       meeting_notes: https://www.notion.so/2fbcadf32a6780c68d77f9ff25e8a9fd
-      kickoff_plan: https://www.notion.so/2ffcadf32a67810dadf5f70aab2bba74
+      review_notes: https://www.notion.so/30434930420e8040aadedd7e50308916
+    docs:
+      learnings: context/process/learnings.md
+      retros: context/process/retrospective.md
+      decisions: context/product/decisions.md
+      claude_md: CLAUDE.md
+    skills_dir: .claude/skills
+    rules_dir: .claude/rules
+
+  booster-backend:
+    type: advisory
+    path: ~/dev/crabgrass-backend
+    repo: GoManzanas/crabgrass-backend
+    notion:
+      board: https://www.notion.so/2d534930420e805f8baac2eac14ccd13
+      meeting_notes: https://www.notion.so/2fbcadf32a6780c68d77f9ff25e8a9fd
+      review_notes: https://www.notion.so/30434930420e8040aadedd7e50308916
+    docs:
+      learnings: context/process/learnings.md
+      retros: context/process/retrospective.md
+      decisions: context/product/decisions.md
+      claude_md: CLAUDE.md
+    skills_dir: .claude/skills
+    rules_dir: .claude/rules
+
+  # Shared Booster engagement metadata
+  booster-engagement:
+    type: advisory
     team:
       - name: Ling
         role: Founder
@@ -68,13 +96,12 @@ projects:
     stack:
       languages: [Python, TypeScript]
       tools:
-        ticketing: null    # TBD
+        ticketing: Notion
         docs: Notion
-        ci_cd: null        # TBD
-        repo: null         # TBD — likely GitHub
-        communication: null # TBD
+        ci_cd: GitHub Actions
+        repo: GitHub (GoManzanas org)
     engagement:
-      status: proposed
+      status: active
       goal: "Get engineering team to 2-3x productivity with Claude Code"
       timeline: "2 weeks, ~2 hours of Bryan's time"
       success_metrics:

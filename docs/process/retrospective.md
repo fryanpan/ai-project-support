@@ -2,6 +2,48 @@
 
 Session retrospectives and process improvements.
 
+## 2026-02-13 - Booster Claude Code setup (FE + BE)
+
+### Time Breakdown
+| Started | Phase | 👤 Hands-On Time | 🤖 Agent Time | Problems |
+|---------|-------|-----------------|---------------|----------|
+| 10:50am | Plan (Notion ticket, registry, templates, plan draft + revision) | █ 6m | █████ 26m | ⚠ Notion WebFetch failed |
+| 11:16am | Build FE+BE (CLAUDE.md, .claude/, rules, skills, docs, Vitest) | █ 2m | ██ 12m | ⚠ 6m lost on subagents |
+| 11:27am | Config (Notion MCP, LSP plugins, Antigravity audit + deprecation) | ██ 10m | █ 6m | |
+| 11:41am | Reorg (context/ subfolders, cross-refs, AI_README) | ██ 7m | █ 5m | |
+| 11:50am | Review (code review both repos, GitHub MCP, fix findings) | █ 4m | █ 7m | |
+| 12:00pm | Commit + push (committed 3 repos, push failed all auth methods) | █████ 17m | ██ 12m | ⚠ No write access to GoManzanas |
+| 12:29pm | Retro | ██ 8m | █ 5m | ⚠ First pass undercounted hands-on |
+
+(each █ ≈ 3 min)
+
+### Metrics
+| Metric | Duration |
+|--------|----------|
+| Total wall-clock | 1h 53m |
+| Hands-on | ~55-60m (~53%) |
+| Agent time | ~74m (overlap with hands-on) |
+| Context continuations | 2 |
+| Rework | ~20m (subagents, push auth) |
+| Retro analysis time | ~12 min (2 passes) |
+
+### Key Observations
+- BE setup reused FE patterns and took only 2 min — "do FE first, copy to BE" works well
+- Antigravity audit and context/ reorg were clean, zero rework
+- Code review caught real issues (missing .gitkeep, alias sync comment)
+- Context ran out twice during cross-repo setup — lots of file reads burn context fast
+- Push failed via SSH, `gh`, and MCP PAT — no auth method had write access to GoManzanas org
+
+### Feedback
+**What worked:** Work went smoothly overall, reuse patterns between repos, code review caught real issues
+**What didn't:** Subagent false start (already known), GitHub push access (team will grant org-level access)
+
+### Actions Taken
+| Issue | Action Type | Change |
+|-------|-------------|--------|
+| Context burns fast on multi-repo setup | Update learnings | Added note about committing between repos to preserve progress |
+| Retro undercounted hands-on time | Update retro skill | Clarified that gaps between agent and user messages are hands-on time, not idle |
+
 ## 2026-02-12 - Retro format redesign
 
 ### Time Breakdown

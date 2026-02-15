@@ -19,6 +19,7 @@ Only run this skill when:
    - The transcript is at: `~/.claude/projects/<project-path>/<session-id>.jsonl`
    - Find the correct path by globbing `~/.claude/projects/**/*.jsonl` sorted by modification time
    - Use a subagent (Task tool with `general-purpose` type) to read the JSONL file, extract timestamps, and calculate durations
+   - **Counting hands-on time**: Gaps between agent completion and the next user message are hands-on time (user reading output, reviewing, deciding, typing), NOT idle time. Only count gaps of 10+ minutes with zero messages as idle. The user is also actively engaged during agent work — monitoring output, checking context usage, and doing concurrent terminal work. Measurable gaps are a floor, not a ceiling.
 
    Present as a time breakdown table with proportional bars and a metrics summary:
 
