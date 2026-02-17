@@ -27,9 +27,8 @@ For the last two triggers, use a lightweight prompt: "Good moment for a quick re
    **What to calculate:**
    - Break the session into phases based on what was being worked on (use user messages as phase boundaries)
    - For each phase: start time, end time, duration in minutes
-   - Flag user idle gaps (>5 min between user messages with no assistant activity)
-   - Flag user hands-on time (auth steps, manual actions, active back-and-forth)
-   - Calculate totals: session wall-clock, active work time, user hands-on time, fully automated agent time, user idle time
+   - **Counting hands-on time**: Gaps between agent completion and the next user message are hands-on time (user reading output, reviewing, deciding, typing), NOT idle time. Only count gaps of 10+ minutes with zero messages as idle. The user is also actively engaged during agent work — monitoring output, checking context, and doing concurrent terminal work. Measurable gaps are a floor, not a ceiling.
+   - Calculate totals: session wall-clock, hands-on time, automated agent time, idle time
 
    Present as a time breakdown table with proportional bars and a metrics summary:
 
