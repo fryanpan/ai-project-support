@@ -1,0 +1,5 @@
+registry.yaml
+docs/process/retrospective.md
+research/applied/*
+!research/applied/.gitkeep
+.context/
