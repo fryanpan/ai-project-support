@@ -22,7 +22,7 @@ When invoked without a specific topic (or with `watchlist`), research these open
 
 1. **Understand the problem**: If `$ARGUMENTS` is a specific pain point or outcome, start from that. Frame it as a question — "How do I...?" or "What would help with...?" Don't start from a tool name.
 
-2. **Spawn a research team**: Create an agent team and divide the research into focused angles — by sub-question, source type, or tool category — one teammate per angle. Each teammate independently researches their angle (steps 3–6 below). After initial findings are written, teammates **share results with each other and actively challenge each other's conclusions** — looking for gaps, contradictions, and overconfident claims. When all teammates finish, the lead synthesizes the debated findings and proceeds to step 7.
+2. **Spawn a research team**: Create an agent team and divide the research into focused angles — by sub-question, source type, or tool category — one teammate per angle. For the **watchlist**, assign one open question per teammate. Each teammate independently researches their angle (steps 3–6 below), then the team runs a debate round (step 7) before the lead synthesizes (step 8).
 
 3. **Search broadly** *(each teammate, for their assigned angle)*:
    - Use `WebSearch` to find how people are solving this problem — blog posts, HN discussions, tool docs, community threads
@@ -31,8 +31,8 @@ When invoked without a specific topic (or with `watchlist`), research these open
    - Focus on what's **new since the last research** — check `research/topics/` for existing findings and their dates
 
 4. **Write findings** *(each teammate)* to the appropriate location:
-   - **Ongoing question**: Update `research/topics/{topic-slug}.md` with new findings appended under a date header
-   - **New discovery**: Create `research/evaluations/{YYYY-MM-DD}-{topic-slug}.md`
+   - **Watchlist question** (one teammate per question): Update `research/topics/{topic-slug}.md` with new findings appended under a date header
+   - **Single-topic, multi-angle** (multiple teammates on one topic): Each teammate creates `research/evaluations/{YYYY-MM-DD}-{topic-slug}-{angle}.md` to avoid write conflicts — the lead consolidates in step 8
 
    Each finding should include:
    - **Problem it addresses** — what pain point or outcome does this help with
@@ -49,7 +49,10 @@ When invoked without a specific topic (or with `watchlist`), research these open
    - Describe what would need to change (skill update, new tool, workflow change)
    - Rate priority (do now / explore later / watch)
 
-7. **Synthesize** *(lead)*: After all teammates finish and debate, summarize for the user:
+7. **Debate** *(teammates)*: Share findings with each other and **actively challenge each other's conclusions** — looking for gaps, contradictions, and overconfident claims. The lead orchestrates the exchange and waits for it to complete before synthesizing.
+
+8. **Synthesize** *(lead)*: After the debate round, summarize for the user:
    - What the team found and how it addresses the original problem
+   - For single-topic research, consolidate angle files into `research/topics/{topic-slug}.md`
    - Recommend specific `/propagate` actions if applicable
    - Flag anything that needs a user decision
