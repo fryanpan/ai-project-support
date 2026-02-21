@@ -22,13 +22,15 @@ When invoked without a specific topic (or with `watchlist`), research these open
 
 1. **Understand the problem**: If `$ARGUMENTS` is a specific pain point or outcome, start from that. Frame it as a question — "How do I...?" or "What would help with...?" Don't start from a tool name.
 
-2. **Search broadly**:
+2. **Spawn a research team**: Create an agent team and divide the research into focused angles — by sub-question, source type, or tool category — one teammate per angle. Each teammate independently researches their angle (steps 3–6 below). After initial findings are written, teammates **share results with each other and actively challenge each other's conclusions** — looking for gaps, contradictions, and overconfident claims. When all teammates finish, the lead synthesizes the debated findings and proceeds to step 7.
+
+3. **Search broadly** *(each teammate, for their assigned angle)*:
    - Use `WebSearch` to find how people are solving this problem — blog posts, HN discussions, tool docs, community threads
    - Use `WebFetch` to read the most relevant pages
    - Look across categories: Claude Code features, community tools (GSD, Autoclaude, aider, cursor, etc.), workflow patterns, agent frameworks
    - Focus on what's **new since the last research** — check `research/topics/` for existing findings and their dates
 
-3. **Write findings** to the appropriate location:
+4. **Write findings** *(each teammate)* to the appropriate location:
    - **Ongoing question**: Update `research/topics/{topic-slug}.md` with new findings appended under a date header
    - **New discovery**: Create `research/evaluations/{YYYY-MM-DD}-{topic-slug}.md`
 
@@ -40,14 +42,14 @@ When invoked without a specific topic (or with `watchlist`), research these open
    - **Effort to adopt** — what would need to change (S/M/L)
    - **Source URLs** — links to the original content
 
-4. **Commit** the research file with message: `research: [topic slug] findings`
+5. **Commit** *(each teammate)* the research file with message: `research: [topic slug] findings`
 
-5. **Assess actionability**: For each finding that could improve our projects:
+6. **Assess actionability** *(each teammate)*: For each finding that could improve our projects:
    - Note which projects would benefit
    - Describe what would need to change (skill update, new tool, workflow change)
    - Rate priority (do now / explore later / watch)
 
-6. **Summarize** for the user:
-   - What you found and how it addresses the original problem
+7. **Synthesize** *(lead)*: After all teammates finish and debate, summarize for the user:
+   - What the team found and how it addresses the original problem
    - Recommend specific `/propagate` actions if applicable
    - Flag anything that needs a user decision
