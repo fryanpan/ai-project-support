@@ -255,8 +255,161 @@ claude mcp add --transport stdio context7 -- npx -y @context7/mcp@latest
 
 ---
 
+## MCP + Skills: How They Work Together
+
+**Updated: 2026-02-22**
+
+MCP and skills are complementary layers, not alternatives:
+- **MCP** = connectivity layer. Exposes tools (read a file, query a DB, create a PR). Agnostic to the task.
+- **Skills** = behavior layer. Instructions for *how to use* those tools for a specific workflow (deploy, review, propagate).
+
+The rule of thumb: MCP server instructions cover how to use the server and its tools correctly. Skill instructions cover how to use them for a given process or in a multi-server workflow.
+
+**Sources:**
+- https://claude.com/blog/extending-claude-capabilities-with-skills-mcp-servers
+- https://smithhorngroup.substack.com/p/choosing-between-skills-subagents
+- https://code.claude.com/docs/en/skills
+
+### Pattern 1: One Skill Coordinating Multiple MCP Servers
+
+A single skill can orchestrate multiple MCP servers in one workflow. Example: a "competitive analysis" skill that searches Google Drive for internal research (Drive MCP), pulls competitor repos (GitHub MCP), and gathers market data (web search).
+
+**For us:** Our `/propagate` skill already coordinates git operations, file reads, and GitHub PRs. Adding GitHub MCP would let it do structured code search across target repos (find all files matching a template) instead of relying on `gh` CLI output parsing.
+
+### Pattern 2: Multiple Skills Enhancing One MCP Connection
+
+Different skills can extract different value from one MCP server. Notion demonstrates this: separate skills for meeting prep, research capture, and spec-to-implementation all use the same Notion MCP connection differently.
+
+**For us:** If we add Notion MCP, we could have `/aggregate` read project retros from Notion, while a separate review skill writes findings to Notion pages — same connection, different workflows.
+
+### Pattern 3: Skills + Subagents + MCP Combined
+
+The full pattern for production teams:
+```
+Main Agent → Spawns Subagent → Subagent loads relevant Skill → Calls MCP for data → Returns summary
+```
+
+Skills define the procedure, subagents provide context isolation, MCP provides external access. This maps to our existing architecture: `/propagate` (skill) could spawn a subagent per project (isolation) that uses GitHub MCP (external access) to check for drift.
+
+### Avoiding Conflicts
+
+When combining MCP servers and skills, watch for conflicting instructions. If your MCP server says to return JSON and your skill says to format as markdown, Claude has to guess. Let MCP handle connectivity; let skills handle presentation, sequencing, and workflow logic.
+
+### Decision Flow
+
+1. **Need external system access?** → MCP server
+2. **Need context isolation for complex multi-step work?** → Subagent
+3. **Need reusable procedures or domain knowledge?** → Skill
+4. **Need all three?** → Combine: skill defines the workflow, subagent isolates it, MCP connects it
+
+### Scaling: Tool Search
+
+When you have many MCP servers, their tool definitions can bloat context. Claude Code auto-enables **Tool Search** when MCP tools exceed 10% of context — it lazy-loads tools on demand instead of preloading all definitions. This means you can configure many servers without penalty. Server `description` fields become important since Tool Search uses them to find relevant tools.
+
+---
+
+## The Official MCP Registry
+
+**Updated: 2026-02-22**
+
+Anthropic (along with the Linux Foundation's Agentic AI Foundation) now maintains an official MCP Registry at **https://registry.modelcontextprotocol.io**.
+
+### What it is
+- **Canonical metadata directory** — holds metadata about MCP servers, not the servers themselves
+- **API-accessible** — `https://registry.modelcontextprotocol.io/v0/servers`
+- **Community-governed** — backed by Anthropic, GitHub, Microsoft, OpenAI (via the AAIF under Linux Foundation)
+- **Vendor-neutral** — any server can register; it's not an Anthropic-only store
+
+### How publishing works
+Servers use a `server.json` file with namespace-based naming:
+- `io.github.yourname/*` — requires GitHub authentication
+- `com.yourcompany/*` — requires DNS or HTTP domain verification
+
+### What this means for us
+The registry is where first-party servers are published. When evaluating an MCP server, check the registry first — listed servers have at least passed basic metadata validation. But the registry is intentionally minimal (no reviews, no quality scores), so listing alone doesn't indicate quality.
+
+Claude Code's built-in docs page also dynamically fetches from an API to show compatible servers. The `/mcp` command in Claude Code is the practical entry point.
+
+**Source:** https://registry.modelcontextprotocol.io, https://www.gentoro.com/blog/what-is-anthropics-new-mcp-registry
+
+---
+
+## Autoclaude & Autonomous Agent Frameworks
+
+**Updated: 2026-02-22**
+
+There are several projects in the "autonomous Claude" space. The name "Autoclaude" refers to multiple distinct projects — here's what actually exists:
+
+### Auto-Claude (by AndyMik90) — Most Notable
+
+**What it is:** Autonomous multi-agent coding framework built on Claude Agent SDK. Desktop app + CLI with a kanban-style UI.
+
+**How it works:** User describes a goal → Spec creation pipeline assesses complexity → Planner agent breaks into subtasks → Coder agent implements → QA reviewer validates → QA fixer resolves issues → User reviews and merges. All work happens in isolated git worktrees.
+
+**Architecture:** Python backend (CLI + agent logic) + Electron/React frontend. Uses Claude Agent SDK for agent orchestration.
+
+**Why it's interesting for us:** The worktree isolation pattern mirrors what we already do. The multi-agent pipeline (plan → code → review → fix) is a more structured version of what Claude Code does in a single session.
+
+**Source:** https://github.com/AndyMik90/Auto-Claude
+
+### AutoClaude (by Ashburn Studios) — Experimental
+
+**What it is:** Framework that turns Claude Code into an autonomous development assistant. Hook-based — intercepts Claude Code at critical points.
+
+**How it works:** Follows "Explore → Plan → Research → Implement → Test → Commit → Compress" cycle. Containerized sandbox (Docker/Podman) for safe execution. Achieves up to 32x context compression for long sessions.
+
+**Status:** Experimental. MIT licensed, actively maintained but should be reviewed before production use.
+
+**Source:** https://github.com/ashburnstudios/autoclaude
+
+### Claude Flow (by ruvnet) — Multi-Agent Swarms
+
+**What it is:** Agent orchestration platform for deploying multi-agent swarms with MCP protocol support.
+
+**Why it's interesting:** Native MCP integration means agents can share MCP server connections. Claims enterprise-grade architecture with distributed swarm intelligence.
+
+**Source:** https://github.com/ruvnet/claude-flow
+
+### Ralph (by Frank Bria) — Continuous Loop Pattern
+
+**What it is:** Implementation of Geoffrey Huntley's technique for continuous autonomous development cycles. Claude Code iteratively improves a project until completion.
+
+**Why it's interesting:** Simple approach — just a loop with exit detection. Built-in safeguards prevent infinite loops and API overuse. Bash + tmux based.
+
+**Source:** https://github.com/frankbria/ralph-claude-code
+
+### Assessment
+
+| Project | Approach | Maturity | Relevance to Us |
+|---------|----------|----------|-----------------|
+| Auto-Claude (AndyMik90) | Multi-agent SDLC pipeline | Most complete — desktop app, releases | Medium — we don't need autonomous coding, but the worktree + agent patterns are instructive |
+| AutoClaude (Ashburn) | Hook-based autonomy | Experimental | Low — we already have hook-based workflows |
+| Claude Flow | Swarm orchestration | Claims production-ready | Low — over-engineered for our needs |
+| Ralph | Simple loop | Minimal, focused | Watch — the exit detection pattern could be useful for batch operations |
+
+**Bottom line:** None of these are directly adoptable for our metaproject use case (cross-project management, not autonomous coding). But Auto-Claude's multi-agent patterns and worktree isolation are worth studying if we ever build more complex agent workflows.
+
+### Broader Ecosystem (from awesome-claude-code)
+
+The **[awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code)** list catalogs the full ecosystem:
+
+**Agent Orchestrators:** Auto-Claude, Claude Squad (multiple instances in separate workspaces), Claude Swarm (interconnected agent swarms), TSK (Rust CLI with Docker-sandboxed parallel agents)
+
+**Notable Skill Collections:**
+- **Trail of Bits Security Skills** — 12+ security-focused skills for code auditing
+- **Compound Engineering Plugin** — agents focused on turning mistakes into improvement (similar to our feedback-loop approach)
+- **cc-devops-skills** — detailed DevOps skills for infrastructure-as-code
+
+**Hooks & Automation:** TDD Guard (hooks enforcing test-driven development), CC Notify (desktop notifications), TypeScript Quality Hooks (real-time linting)
+
+**Source:** https://github.com/hesreallyhim/awesome-claude-code
+
+---
+
 ## Key Takeaway
 
 MCP is the right abstraction — a standard protocol for connecting AI to tools. But the ecosystem is in an "early web" phase where most content is low quality and security is an afterthought. The winning strategy is conservative: adopt the few high-quality first-party servers (GitHub, Sentry, Notion), ignore the long tail, and revisit in 6 months as the ecosystem matures.
 
-For our metaproject specifically: GitHub MCP is the highest-value addition since we do cross-project PR work daily. Everything else is nice-to-have.
+**The real leverage is MCP + skills combined.** MCP gives Claude access to tools; skills tell Claude how to use them for your specific workflows. Neither is sufficient alone. For our metaproject: GitHub MCP + our existing `/propagate` skill is the highest-value combination.
+
+For autonomous agent frameworks (Autoclaude et al.): interesting to study, not ready to adopt for our use case. The patterns (worktree isolation, multi-agent pipelines, exit detection) are more valuable than the frameworks themselves.
