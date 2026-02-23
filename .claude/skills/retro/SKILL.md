@@ -20,7 +20,11 @@ Only run this skill when:
    - Find the correct path: the project directory path determines the subfolder under `~/.claude/projects/`. Convert the current working directory to the Claude projects path format (slashes become dashes, e.g., `/Users/me/myproject` → `-Users-me-myproject`), then glob for `~/.claude/projects/<converted-path>/*.jsonl` sorted by modification time. Only fall back to globbing all `~/.claude/projects/**/*.jsonl` if no match is found.
    - **Verify before proceeding**: Read the first few lines of the JSONL file and confirm it contains messages about work done in this project. If the transcript doesn't match (e.g., it's from a different worktree), try the next most recent file or report that the transcript couldn't be found.
    - Use a subagent (Task tool with `general-purpose` type) to read the JSONL file, extract timestamps, and calculate durations
-   - **Counting hands-on time**: Gaps between agent completion and the next user message are hands-on time (user reading output, reviewing, deciding, typing), NOT idle time. Only count gaps of 10+ minutes with zero messages as idle. The user is also actively engaged during agent work — monitoring output, checking context usage, and doing concurrent terminal work. Measurable gaps are a floor, not a ceiling.
+   - **Counting hands-on time**: Do NOT use raw gaps as hands-on time — the user is often running parallel workspaces. Instead, estimate per user message:
+     - **Reading time**: ~0.5 min for short agent outputs (<100 words), ~1-2 min for long ones
+     - **Typing time**: count words in the user's message ÷ 60 wpm
+     - Add these up across all user messages for total hands-on time
+     - Gaps of 10+ minutes with no messages are idle (not hands-on)
 
    Present as a time breakdown table with proportional bars and a metrics summary:
 

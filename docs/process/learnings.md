@@ -14,6 +14,7 @@ Technical discoveries that should persist across sessions.
 ## Project Setup
 - When setting up new projects, do the work in the main thread using this repo's templates and skills — don't delegate to subagents. Subagents can't access project skills (`/propagate`, `/new-project`), struggle with cross-repo file access, and end up reinventing what the skills already do.
 - Multi-repo setup burns through context fast (2 compactions in ~90 min). Commit between repos to preserve progress — if context runs out mid-session, uncommitted work in earlier repos is safe.
+- `mcp__github__push_files` cannot access private repos — skip straight to `git clone` + write files + `git push` for private repos.
 
 ## Propagation
 - Always use worktrees when making changes to target projects — never edit the main worktree directly
