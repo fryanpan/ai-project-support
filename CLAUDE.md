@@ -64,6 +64,11 @@ Some files are gitignored because they contain project-specific data (project na
 
 **After creating a worktree**, run `./scripts/setup-private.sh` to symlink these from the main worktree.
 
+**One-time setup after a fresh clone** — enable the git hook that auto-runs `setup-private.sh` on worktree creation:
+```bash
+git config core.hooksPath .githooks
+```
+
 See `registry.yaml.example` for the registry schema.
 
 ## Linear
