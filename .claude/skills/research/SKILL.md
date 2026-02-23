@@ -26,11 +26,22 @@ When invoked without a specific topic (or with `watchlist`), research these open
    - Use `WebSearch` to find how people are solving this problem — blog posts, HN discussions, tool docs, community threads
    - Use `WebFetch` to read the most relevant pages
    - Look across categories: Claude Code features, community tools (GSD, Autoclaude, aider, cursor, etc.), workflow patterns, agent frameworks
-   - Focus on what's **new since the last research** — check `research/topics/` for existing findings and their dates
+   - Focus on what's **new since the last research** — check `research/` for existing findings and their dates
 
-3. **Write findings** to the appropriate location:
-   - **Ongoing question**: Update `research/topics/{topic-slug}.md` with new findings appended under a date header
-   - **New discovery**: Create `research/evaluations/{YYYY-MM-DD}-{topic-slug}.md`
+3. **Assess fit before writing**: Determine whether the findings belong in this repo or somewhere else.
+
+   Ask yourself:
+   - Does this research affect how the **metaproject** works — templates, skills, conventions, or tool choices that would influence how Claude Code projects are set up?
+   - Or is it driven by a **personal use case** (specific tasks, personal domains like health/finance/networking)?
+
+   If it's personal, **ask the user where to put it** before writing anything:
+   > "This research is specific to [your personal use case]. It doesn't belong in the public metaproject repo. Should I save it to `~/dev/research-notes/` instead?"
+
+   Wait for the user's answer. They may redirect to research-notes, health-tool, personal-finance, or somewhere else.
+
+   If it belongs here, write to `research/{YYYY-MM-DD}-{topic-slug}.md`.
+
+4. **Write findings** (if confirmed to belong here) to `research/{YYYY-MM-DD}-{topic-slug}.md`.
 
    Each finding should include:
    - **Problem it addresses** — what pain point or outcome does this help with
@@ -40,14 +51,14 @@ When invoked without a specific topic (or with `watchlist`), research these open
    - **Effort to adopt** — what would need to change (S/M/L)
    - **Source URLs** — links to the original content
 
-4. **Commit** the research file with message: `research: [topic slug] findings`
+5. **Commit** the research file with message: `research: [topic slug] findings`
 
-5. **Assess actionability**: For each finding that could improve our projects:
+6. **Assess actionability**: For each finding that could improve our projects:
    - Note which projects would benefit
    - Describe what would need to change (skill update, new tool, workflow change)
    - Rate priority (do now / explore later / watch)
 
-6. **Summarize** for the user:
+7. **Summarize** for the user:
    - What you found and how it addresses the original problem
    - Recommend specific `/propagate` actions if applicable
    - Flag anything that needs a user decision
