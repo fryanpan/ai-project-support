@@ -24,7 +24,7 @@ Key characteristics:
 - Can be run headlessly: `codex --quiet --approval-mode full-auto "fix the failing tests"`
 - Open-source (Apache 2.0), accepts PRs, actively maintained
 
-**Maturity:** Released publicly April 2025, reached ~1.0 stability by mid-2025. More mature than AutoClaude/Claude Flow community projects but behind Claude Code in ecosystem depth. The CLI itself is stable; the underlying model (GPT-4o vs o3) choice matters significantly for task quality.
+**Maturity:** Released publicly April 2025, reached ~1.0 stability by mid-2025. More mature than community wrapper projects but behind Claude Code in ecosystem depth. The CLI itself is stable; the underlying model (GPT-4o vs o3) choice matters significantly for task quality.
 
 ### What "Codex Desktop GUI" is
 
