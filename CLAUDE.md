@@ -47,6 +47,12 @@ Each project has 2-5 active Conductor worktrees. The metaproject always reads fr
 - If a template was updated, consider running `/propagate` to push it to projects
 - Log non-obvious decisions in `docs/process/learnings.md`
 
+### Privacy in Commits and PRs
+The names and details of managed projects are private. When writing commit messages or PR descriptions for this repo:
+- Do NOT include project names (e.g., use `registry: add new project`, not `registry: add personal-crm`)
+- Do NOT describe what a new project does or who it's for
+- PR descriptions should only cover what changed in *this* repo (skills, templates, scripts, hooks), not the project that triggered the work
+
 ### Code Style
 - Templates should be generic — no project-specific values hardcoded
 - Use `{{placeholder}}` syntax in `.tmpl` files for values that vary per project
@@ -63,6 +69,11 @@ Some files are gitignored because they contain project-specific data (project na
 | `research/applied/*` | Propagation logs with specific PR URLs |
 
 **After creating a worktree**, run `./scripts/setup-private.sh` to symlink these from the main worktree.
+
+**One-time setup after a fresh clone** — enable the git hook that auto-runs `setup-private.sh` on worktree creation:
+```bash
+git config core.hooksPath .githooks
+```
 
 See `registry.yaml.example` for the registry schema.
 
