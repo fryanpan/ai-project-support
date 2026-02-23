@@ -45,10 +45,11 @@ Create a fully set up project from scratch — GitHub repo, Linear project, Clau
 5. **Push scaffold to GitHub**:
    - Use `mcp__github__push_files` to push all scaffolded files to the `main` branch
    - Commit message: "Initial project scaffold from project-support templates"
+   - **If `push_files` returns 404**: the repo has no commits yet and no default branch. Workaround: clone the repo locally (`git clone <url> /tmp/<name>`), write all files there, make an empty init commit, and push. Then use the local clone for all remaining file operations in this session.
 
 6. **Add to registry**:
-   - Append the new project to `registry.yaml` with path, repo, and Linear info
-   - Commit this change to the metaproject
+   - Append the new project to `registry.yaml` (in the main worktree at `~/dev/project-support/registry.yaml`) with path, repo, and Linear info
+   - Do NOT commit — `registry.yaml` is gitignored and private, lives only in the main worktree
 
 7. **Print setup instructions** for the user:
    ```

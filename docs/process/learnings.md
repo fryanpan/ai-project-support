@@ -14,6 +14,7 @@ Technical discoveries that should persist across sessions.
 ## Project Setup
 - When setting up new projects, do the work in the main thread using this repo's templates and skills — don't delegate to subagents. Subagents can't access project skills (`/propagate`, `/new-project`), struggle with cross-repo file access, and end up reinventing what the skills already do.
 - Multi-repo setup burns through context fast (2 compactions in ~90 min). Commit between repos to preserve progress — if context runs out mid-session, uncommitted work in earlier repos is safe.
+- `mcp__github__push_files` cannot access private repos — skip straight to `git clone` + write files + `git push` for private repos.
 
 ## Propagation
 - Always use worktrees when making changes to target projects — never edit the main worktree directly
@@ -35,6 +36,12 @@ Technical discoveries that should persist across sessions.
 ## Notion MCP
 - `allow_deleting_content: true` on `replace_content` will archive child pages that were embedded in the old content. This is destructive and hard to undo — user had to manually restore pages from Notion trash. Avoid this flag; use `replace_content_range` or `insert_content_after` instead.
 - When replacing content on a page with child pages, always preserve `<page url="...">` tags in the new content to avoid archiving them.
+
+## Brainstorming
+- When the user has already described the problem space clearly in a prior invocation (e.g., a detailed /new-project request), fast-track to proposing a first-cut design after 1-2 targeted questions — don't run the full clarifying sequence. The user will feel like they're repeating themselves if you ask about things they already covered.
+
+## GitHub API
+- `mcp__github__push_files` returns 404 on a brand-new repo with no commits (no default branch exists yet). Workaround: clone the repo locally, make an empty init commit, push to create `main`, then use local git for all subsequent file operations.
 
 ## Working with Users
 - When the user says "set up X for the team," they often mean adoption guidance (how to install, how to use), not config files to commit. Ask which they mean if ambiguous.
