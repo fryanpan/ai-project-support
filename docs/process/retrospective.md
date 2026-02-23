@@ -1,3 +1,1 @@
-# Retrospectives
-
-Session retrospectives and process improvements.
+/Users/bryanchan/dev/project-support/docs/process/retrospective.md

@@ -20,6 +20,23 @@ Project-specific conventions that guide how superpowers plugin skills behave in 
   - Execution strategy: chunking, sequencing vs parallelism, risk notes
   - Testing & deployment strategy
 
+## Execution Strategy
+
+After planning, choose an execution approach. Present these options to the user:
+
+| Approach | When to use | How it works |
+|----------|-------------|--------------|
+| **Executing Plans** (default) | Most tasks. You want human checkpoints between batches. | `superpowers:executing-plans` — creates a worktree, executes in batches of 3 tasks, pauses for review between batches. |
+| **Subagent-Driven Development** | Tasks are independent. You want fast iteration with automated review. | `superpowers:subagent-driven-development` — stays in current session, dispatches a fresh subagent per task with two-stage review (spec compliance, then code quality). |
+| **Agent Team** (experimental) | Highly parallel work where 3+ tasks can run simultaneously with no shared state. | `TeamCreate` + spawn teammates — named agents coordinate via task list and messages, work in true parallel. Requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` env var. |
+
+**Decision flow:**
+1. Are tasks mostly independent with no shared state? If no → **Executing Plans**
+2. Can 3+ tasks genuinely run in parallel? If yes → **Agent Team**
+3. Otherwise → **Subagent-Driven Development** (sequential but automated)
+
+If unsure, default to **Executing Plans** — it's the most predictable.
+
 ## Implementation
 
 - Read relevant existing files before writing anything
