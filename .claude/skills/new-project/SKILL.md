@@ -48,7 +48,8 @@ Create a fully set up project from scratch — GitHub repo, Linear project, Clau
 
 6. **Add to registry**:
    - Append the new project to `registry.yaml` with path, repo, and Linear info
-   - Commit this change to the metaproject
+   - Commit this change to the metaproject with a generic message: `registry: add new project`
+   - Do NOT include the project name in the commit message — registry contents are private
 
 7. **Print setup instructions** for the user:
    ```
