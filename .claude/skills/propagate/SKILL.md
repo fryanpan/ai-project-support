@@ -73,13 +73,16 @@ Compare projects against `templates/` and push approved updates via GitHub PRs.
 
 10. **Open all PRs for review**: After all PRs are created, open each PR URL in the browser using `open <url>` so the user can review them.
 
-11. **Log to `research/applied/`**: Create `research/applied/{YYYY-MM-DD}-propagate-{artifact}.md` with:
-    - What was propagated
-    - Which projects received PRs
-    - PR URLs
-    - Any customizations that were preserved
+11. **Log to `docs/process/propagation-log.md`**: Append an entry with:
+    ```markdown
+    ## YYYY-MM-DD — [artifact] → [projects]
+    - **Changes:** [what was propagated]
+    - **PRs:** [PR URLs]
+    - **Preserved:** [any project-specific customizations kept]
+    ```
+    Create the file if it doesn't exist (header: `# Propagation Log`).
 
-12. **Commit** the applied log with message: `docs: log propagation of [artifact] to [projects]`
+12. **Commit** the propagation log with message: `docs: log propagation of [artifact] to [projects]`
 
 ## Principles
 

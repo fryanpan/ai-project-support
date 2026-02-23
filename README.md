@@ -38,7 +38,7 @@ Some files are gitignored because they contain project-specific data that's pers
 |------|----------|---------|
 | `registry.yaml` | Your project list, team metadata, Linear/Notion IDs | `registry.yaml.example` |
 | `docs/process/retrospective.md` | Session retros (auto-generated, project-specific) | `templates/docs/process/retrospective.md` |
-| `research/applied/*` | Propagation logs with specific PR URLs | — |
+| `docs/process/propagation-log.md` | Propagation audit log with PR URLs | — |
 
 ### Worktree Setup
 

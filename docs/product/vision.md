@@ -14,7 +14,7 @@ The target user for this repo is ultimately someone non-technical, or even an au
 
 2. **Knowledge aggregation** — Pull learnings and retro insights from all projects into a central knowledge base. Identify cross-cutting patterns.
 
-3. **Research** — Stay current on Claude Code, Codex, and community tools (GSD, Autoclaude, Superpowers, aider, cursor, etc.). Evaluate new techniques and apply them.
+3. **Research** — Stay current on Claude Code, Codex, and community tools (GSD, Claude Squad, oh-my-claudecode, aider, cursor, etc.). Evaluate new techniques and apply them.
 
 4. **Start new projects** — Spin up new projects with full GitHub, Linear, and Claude Code setup in one step. Works for any project — personal tools, team codebases, collaborator ideas.
 

@@ -13,7 +13,7 @@ Project-support doesn't build software directly. It manages, reviews, and improv
 
 ### Research
 1. Run `/research` with a topic or use the default watchlist
-2. Review findings in `research/topics/` and `research/evaluations/`
+2. Review findings in `research/`
 3. When findings are actionable, use `/propagate` to apply them
 
 ### New Projects
@@ -28,5 +28,5 @@ Project-support doesn't build software directly. It manages, reviews, and improv
 ## Session Continuity
 - Reference `registry.yaml` for the list of managed projects
 - Read `knowledge/cross-project-learnings.md` for aggregated insights
-- Read `research/topics/` for current research areas
+- Read `research/` for current research findings
 - Check `docs/process/learnings.md` for metaproject-specific gotchas

@@ -66,7 +66,7 @@ Some files are gitignored because they contain project-specific data (project na
 |------|----------|
 | `registry.yaml` | Project list, team metadata, Linear/Notion IDs |
 | `docs/process/retrospective.md` | Session retros (auto-generated, project-specific) |
-| `research/applied/*` | Propagation logs with specific PR URLs |
+| `docs/process/propagation-log.md` | Propagation audit log with PR URLs (gitignored) |
 
 **After creating a worktree**, run `./scripts/setup-private.sh` to symlink these from the main worktree.
 

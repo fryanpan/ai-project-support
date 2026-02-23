@@ -38,7 +38,7 @@ The key principle: **acknowledge what's already there**. Every project has its o
 2. Run `/propagate retro` — diffs template against each project's version
 3. Review diffs, noting project-specific customizations to preserve
 4. Create PRs on each target repo
-5. Log to `research/applied/`
+5. Log to `docs/process/propagation-log.md`
 
 ---
 
@@ -62,7 +62,7 @@ The key principle: **acknowledge what's already there**. Every project has its o
 **Flow**:
 1. Run `/research "how do I reduce setup friction for new projects?"` — starts from the problem, not a tool
 2. Searches broadly across Claude Code features, community tools, blog posts, HN discussions
-3. Findings stored in `research/evaluations/{date}-{topic}.md`
+3. Findings stored in `research/{date}-{topic}.md`
 4. If actionable: note which projects benefit, what changes are needed
 5. Run `/propagate` to push improvements
 
