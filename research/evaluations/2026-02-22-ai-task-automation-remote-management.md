@@ -71,32 +71,46 @@ Reviewed ~30 incomplete tasks across 4 Asana projects. Breakdown by AI-leverage:
 
 ---
 
-## Option 2: OpenHands (the user called it "OpenClaw")
+## Option 2A: OpenHands (formerly OpenDevin) — the software engineering agent
 
-**What it is:** Open-source AI software engineering agent (formerly OpenDevin), by All Hands AI. Web UI + self-hostable + cloud option. As of v1.4.0 (Feb 18, 2026), actively maintained.
-
-**Capabilities:**
-- CodeAct agent: bash, Python, web browsing, file editing
-- Multi-agent support
-- Docker sandbox for safe execution
-- Web UI accessible from any browser (including phone)
+**What it is:** Open-source autonomous coding agent by All Hands AI. Docker sandbox + web UI + REST API. v1.4.0 (Feb 18, 2026).
 
 **Real-world performance:**
-- SWE-bench verified: ~53% claimed, ~26-35% user-reported (gap due to config, model version)
-- Actively maintained: 1.3.0 (Feb 2), 1.4.0 (Feb 18) — biweekly releases
-- Best for: well-scoped coding tasks with clear acceptance criteria
-- Struggles with: open-ended research, personal task management, anything requiring external auth
+- SWE-Bench verified: **77.6% in README badge** but **~26% user-reported** with default config (documented in issue #10767)
+- The gap: advertised numbers use frontier models + non-default `max_iterations=100`; default install uses older models and hits iteration limits 30-45% of the time
+- Best confirmed use case: GitHub issue → auto-draft PR via `fix-me` label + GitHub Actions resolver
 
-**Mobile feedback:** Yes — web UI is browser-based. Not mobile-optimized but functional.
+**Mobile:** Web UI accessible in mobile browser (not native app). OpenHands Cloud (`app.all-hands.dev`) works in Safari/Chrome.
 
-**Asana integration:** None built-in. Would require custom webhook glue.
+**Scheduled tasks:** NOT shipped. Draft PRD filed Feb 2026, 0 comments, still in draft.
+
+**Asana integration:** None built-in.
 
 **Use case fit for your tasks:**
-- "Build some stuff with AI": good match for coding subtasks
-- "Research GLP-1 agonists for MCAS": could work with browse mode
-- Personal tasks (camping reservations, birthday planning): weak — not designed for this
+- "Build some stuff with AI": strong for isolated GitHub issues → PRs
+- Research tasks: possible with web-browsing mode, but not its strength
+- Personal tasks (camping, birthday): not designed for this
 
-**Verdict:** More accessible remotely than Claude Code, but optimized for software engineering. Overhead of self-hosting or paying for cloud is significant for non-coding personal tasks.
+**Verdict:** Mature for coding+GitHub workflows. Significant performance gap between marketing and reality. Not the right tool for personal task management.
+
+## Option 2B: OpenClaw — the personal AI messaging assistant ⭐ NEW FINDING
+
+**"OpenClaw" is NOT OpenHands** — it's a completely separate product that may be MORE relevant to your use case.
+
+**What it is:** Personal AI assistant gateway (GitHub: openclaw/openclaw, 219K stars, created Nov 2025). Routes conversations from messaging apps to LLMs. Think: WhatsApp/Telegram/Slack/Discord/iMessage/Signal all routing to Claude.
+
+**Why this matters for you:**
+- You can message Claude from any app you already use, from your phone, from anywhere
+- Claude can respond, take actions, report back — all through messaging
+- This is a different architecture than Happy (which mirrors terminal sessions) — OpenClaw wraps Claude in a conversational interface accessible via the apps you already have
+
+**How it relates to your use case:**
+- "Give human feedback from anywhere" → text Claude on Telegram/iMessage, it responds
+- "When I create a task, AI reviews it" → could wire Asana → OpenClaw → Claude → Asana comment
+- Less suited for long-running autonomous coding tasks; more suited for quick delegation and Q&A
+
+**Sources:**
+- https://github.com/openclaw/openclaw (219K stars, latest release: 2026.2.21)
 
 ---
 
