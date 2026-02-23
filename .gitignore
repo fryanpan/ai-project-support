@@ -1,6 +1,4 @@
 registry.yaml
 docs/process/retrospective.md
 docs/process/propagation-log.md
-research/applied/*
-!research/applied/.gitkeep
 .context/
