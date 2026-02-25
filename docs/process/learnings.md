@@ -43,6 +43,11 @@ Technical discoveries that should persist across sessions.
 ## GitHub API
 - `mcp__github__push_files` returns 404 on a brand-new repo with no commits (no default branch exists yet). Workaround: clone the repo locally, make an empty init commit, push to create `main`, then use local git for all subsequent file operations.
 
+## Agent Teams
+- Agent teams are unreliable for web-research-heavy tasks (as of Feb 2026). Spawned 6 agents across 2 attempts; none ever reported back. Direct research (web searches + fetches in the main thread) completed in 4 minutes what agents failed to do in hours. **Revisit mid-March 2026** — the feature just launched and may improve.
+- Agent teams don't recover from connectivity loss — if the network drops while they're running, they silently stall. Always have a fallback plan.
+- For research tasks, prefer doing it directly unless there are 5+ truly independent angles that would clearly benefit from parallelism. The overhead of spawning, monitoring, and recovering from failures outweighs the parallelism benefit for most research.
+
 ## Working with Users
 - When the user says "set up X for the team," they often mean adoption guidance (how to install, how to use), not config files to commit. Ask which they mean if ambiguous.
 - Short, direct user corrections ("don't bury the lede", "stop mentioning feature chains") are the most productive feedback. Don't over-explain in response — just fix it.
