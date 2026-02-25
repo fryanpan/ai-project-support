@@ -5,7 +5,7 @@ user-invocable: true
 ---
 # Aggregate Cross-Project Learnings
 
-Pull learnings and retro insights from all projects in `registry.yaml` into `knowledge/`.
+Pull learnings and retro insights from all projects in `registry.yaml` into `docs/process/cross-project-learnings.md`.
 
 ## Steps
 
@@ -20,9 +20,9 @@ Pull learnings and retro insights from all projects in `registry.yaml` into `kno
    - `<path>/<docs.learnings>` (typically `docs/process/learnings.md`)
    - `<path>/<docs.retros>` (typically `docs/process/retrospective.md`)
 
-4. **Compare against `knowledge/cross-project-learnings.md`** to identify new entries that haven't been aggregated yet. Avoid duplicating entries already present.
+4. **Compare against `docs/process/cross-project-learnings.md`** to identify new entries that haven't been aggregated yet. Avoid duplicating entries already present.
 
-5. **Append new entries** to `knowledge/cross-project-learnings.md`, tagged with:
+5. **Append new entries** to `docs/process/cross-project-learnings.md`, tagged with:
    - Source project name
    - Date (from retro entry or current date for learnings)
    - Category (if present in the original)
@@ -33,7 +33,7 @@ Pull learnings and retro insights from all projects in `registry.yaml` into `kno
    - [Specific learning or insight]
    ```
 
-6. **Identify cross-cutting patterns** — learnings that appear in multiple projects or that would benefit all projects. Add these to `knowledge/patterns.md` with:
+6. **Identify cross-cutting patterns** — learnings that appear in multiple projects or that would benefit all projects. Add these to the "Cross-Cutting Patterns" section of `docs/process/cross-project-learnings.md` with:
    - The pattern description
    - Which projects it was observed in
    - Whether it should be propagated (and how — skill update, CLAUDE.md update, etc.)
@@ -44,7 +44,7 @@ Pull learnings and retro insights from all projects in `registry.yaml` into `kno
    - Check whether the pattern predates a major tooling adoption (e.g., superpowers) — if the recommended fix is now covered by a shared plugin, flag it as "already addressed by [plugin]" rather than a new action
    - Only flag a pattern as needing propagation if it's absent from templates, absent from the propagation log, and not covered by an installed shared plugin
 
-7. **Commit** the updated `knowledge/` files with message: `knowledge: aggregate learnings from [N] projects`
+7. **Commit** the updated `docs/process/cross-project-learnings.md` with message: `knowledge: aggregate learnings from [N] projects`
 
 8. **Summarize** what was aggregated:
    - How many new entries from each project

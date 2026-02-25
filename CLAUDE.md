@@ -21,7 +21,7 @@ Each project has 2-5 active Conductor worktrees. The metaproject always reads fr
 
 | Skill | Purpose |
 |-------|---------|
-| `/aggregate` | Pull learnings and retros from all registered projects into `knowledge/` |
+| `/aggregate` | Pull learnings and retros from all registered projects into `docs/process/cross-project-learnings.md` |
 | `/research` | Research a pain point or desired outcome — finds tools, techniques, and approaches |
 | `/propagate` | Compare projects against templates, push approved updates via PRs |
 | `/new-project` | Scaffold a new project with GitHub repo, Linear project, `.claude/`, and `docs/` |
@@ -32,15 +32,14 @@ Each project has 2-5 active Conductor worktrees. The metaproject always reads fr
 | Directory | Purpose |
 |-----------|---------|
 | `templates/` | Canonical versions of shared skills, rules, doc templates, settings |
-| `knowledge/` | Aggregated cross-project learnings and patterns |
 | `research/` | Research findings on agent techniques and tools |
-| `docs/process/` | This project's own learnings, retros, and process docs |
+| `docs/process/` | This project's own learnings, retros, process docs, and cross-project learnings |
 
 ## Conventions
 
 ### Before Making Changes
 - Read `registry.yaml` to understand which projects are managed
-- Check `knowledge/cross-project-learnings.md` for known patterns
+- Check `docs/process/cross-project-learnings.md` for known patterns
 - Check `docs/process/learnings.md` for metaproject-specific gotchas
 
 ### After Making Changes

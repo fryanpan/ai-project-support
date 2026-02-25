@@ -45,7 +45,7 @@ Technical discoveries that should persist across sessions.
 
 ## Aggregate Workflow
 - When reviewing aggregate outputs, GitHub PR diff comments are an effective async review pattern — the agent can address all comments in a single follow-up pass without back-and-forth
-- When proposing propagation actions in `knowledge/patterns.md`, reconcile against: (1) what `templates/` already contains, (2) what the propagation log shows, and (3) what shared plugins (e.g., superpowers) already cover — learnings from older retros may predate major tooling changes and recommend fixes that are now redundant
+- When proposing propagation actions in `docs/process/cross-project-learnings.md`, reconcile against: (1) what `templates/` already contains, (2) what the propagation log shows, and (3) what shared plugins (e.g., superpowers) already cover — learnings from older retros may predate major tooling changes and recommend fixes that are now redundant
 
 ## Tooling
 - The `Write` and `Edit` tools require a file to have been read "recently" in the same session — if many tool calls have elapsed since the initial read, re-read the file immediately before writing/editing to avoid "file not read yet" errors
