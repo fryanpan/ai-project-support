@@ -38,6 +38,12 @@ Pull learnings and retro insights from all projects in `registry.yaml` into `kno
    - Which projects it was observed in
    - Whether it should be propagated (and how — skill update, CLAUDE.md update, etc.)
 
+   **Before marking a pattern as needing propagation**, reconcile against what's already been addressed:
+   - Read `templates/skills/` and `templates/rules/` — if the fix is already in a template, note it as done
+   - Read `docs/process/propagation-log.md` — if it was already pushed to projects, note that
+   - Check whether the pattern predates a major tooling adoption (e.g., superpowers) — if the recommended fix is now covered by a shared plugin, flag it as "already addressed by [plugin]" rather than a new action
+   - Only flag a pattern as needing propagation if it's absent from templates, absent from the propagation log, and not covered by an installed shared plugin
+
 7. **Commit** the updated `knowledge/` files with message: `knowledge: aggregate learnings from [N] projects`
 
 8. **Summarize** what was aggregated:
