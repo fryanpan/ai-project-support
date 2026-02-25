@@ -1,14 +1,16 @@
-# Cross-Project Learnings
+# Aggregation Log
 
-Aggregated learnings from all registered projects. Use `/aggregate` to pull new entries.
+History of `/aggregate` passes. Each section records what was found and synthesized in that run.
 
 ---
 
-## Cross-Cutting Patterns
+## 2026-02-24
+
+### Cross-Cutting Patterns
 
 Patterns observed across multiple projects with propagation recommendations.
 
-### Plan-First → Fast Implementation
+#### Plan-First → Fast Implementation
 
 **Observed in:** health-tool (every sprint), bike-tool (BC-34, BC-46, BC-55, BC-61), booster-frontend (summary revision), booster-backend (summary history)
 
@@ -20,7 +22,7 @@ Patterns observed across multiple projects with propagation recommendations.
 
 ---
 
-### Over-Engineered Initial Plans (Recurring)
+#### Over-Engineered Initial Plans (Recurring)
 
 **Observed in:** health-tool (Sprint 3, HEA-27, HEA-24), bike-tool (BC-34), booster-backend (M2M vs FK)
 
@@ -32,7 +34,7 @@ Patterns observed across multiple projects with propagation recommendations.
 
 ---
 
-### Automatic Code Review After Implementation
+#### Automatic Code Review After Implementation
 
 **Observed in:** health-tool (added to /implement Step 4.5), bike-tool (multiple sessions), booster-frontend, booster-backend
 
@@ -44,7 +46,7 @@ Patterns observed across multiple projects with propagation recommendations.
 
 ---
 
-### Agent Ignores Existing Conventions Without Explicit Guidance
+#### Agent Ignores Existing Conventions Without Explicit Guidance
 
 **Observed in:** health-tool (HEA-7, HEA-16), booster-backend (PR #161)
 
@@ -59,7 +61,7 @@ Patterns observed across multiple projects with propagation recommendations.
 
 ---
 
-### Live Integration Tests Reveal Bugs Fixture-Only Tests Miss
+#### Live Integration Tests Reveal Bugs Fixture-Only Tests Miss
 
 **Observed in:** health-tool (Sprint 3: 5+ bugs; HEA-9: unwanted Asana tasks)
 
@@ -71,7 +73,7 @@ Patterns observed across multiple projects with propagation recommendations.
 
 ---
 
-### Notion MCP Retry Behavior
+#### Notion MCP Retry Behavior
 
 **Observed in:** personal-crm (2026-02-23), metaproject (project-support)
 
@@ -81,7 +83,7 @@ Patterns observed across multiple projects with propagation recommendations.
 
 ---
 
-### Retro Requires Reading JSONL Transcript
+#### Retro Requires Reading JSONL Transcript
 
 **Observed in:** health-tool (HEA-5), bike-tool (BC-61)
 
@@ -91,7 +93,7 @@ Patterns observed across multiple projects with propagation recommendations.
 
 ---
 
-### Third-Party SDK Constraint Check Before Architecture
+#### Third-Party SDK Constraint Check Before Architecture
 
 **Observed in:** bike-tool (Picovoice: wakeword syllable requirement), health-tool (Cloudflare User-Agent block)
 
@@ -101,39 +103,39 @@ Patterns observed across multiple projects with propagation recommendations.
 
 ---
 
-## Additional Project Observations
+### Additional Project Observations
 
 Learnings from individual projects that don't yet rise to a cross-cutting pattern.
 
-### Skills Format (from health-tool, 2026-02-06)
+#### Skills Format (from health-tool, 2026-02-06)
 - Skill format: directory with SKILL.md — flat .md files in `.claude/skills/` do NOT appear in the user-invocable skill list
 - Frontmatter uses hyphens not underscores: `user-invocable`, `disable-model-invocation`
 - The `description` field drives auto-invocation — make trigger conditions explicit
 - Deploy paths in skills should be relative (not absolute) so they work across worktrees
 - Skills should call CLI scripts rather than embedding language one-liners
 
-### Skill Auto-Invocation (from health-tool, 2026-02-07)
+#### Skill Auto-Invocation (from health-tool, 2026-02-07)
 - Auto-invocation is a known Claude Code limitation (~0-20% reliability without hooks)
 - Most effective workaround: forced eval hook on UserPromptSubmit (~84% reliability)
 - Plans created via plan mode go to `.claude/plans/` (ephemeral) — use a persist-plan skill to save to `docs/product/plans/`
 
-### Linear Workflow (from health-tool, 2026-02-10)
+#### Linear Workflow (from health-tool, 2026-02-10)
 - Update ticket status at transitions (In Progress, In Review, Done) — automate via `.claude/rules/linear-workflow.md`
 
-### Product Design (from bike-tool, 2026-02-11)
+#### Product Design (from bike-tool, 2026-02-11)
 - Consider the user's physical context before proposing UX — toggle vs fire-and-forget matters for hands-busy scenarios
 - Ask about context of use early: when/where do they interact, what are their hands doing?
 
-### E2E Testing / Playwright (from booster-frontend, 2026-02-15)
+#### E2E Testing / Playwright (from booster-frontend, 2026-02-15)
 - CSS class sharing causes false positives — use structural selectors (`.prose`, `.animate-bounce`) not shared background classes
 - LLM-backed operations need generous timeouts (60-90s); non-LLM endpoints respond in ~1ms
 - Use `toPass()` with reload + re-check to poll for async results
 - `gemini-flash` models are dramatically better than Pro for E2E tests: faster, higher quotas
 
-### Backend Model Conventions (from booster-backend, 2026-02-15)
+#### Backend Model Conventions (from booster-backend, 2026-02-15)
 - Before writing a new model, cross-reference existing models for inheritance chain and mixin conventions
 - SQLAlchemy sends Python enum member NAMES (UPPERCASE) to PostgreSQL, not `.value` (lowercase)
 
-### Research Sessions (from personal-crm, 2026-02-23)
+#### Research Sessions (from personal-crm, 2026-02-23)
 - Flag uncertainty explicitly on legal, procedural, or factual claims — don't assert with confidence without a citation
 - Research sessions have no workflow scaffolding — use a lighter retro trigger

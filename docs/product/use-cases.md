@@ -49,7 +49,7 @@ The key principle: **acknowledge what's already there**. Every project has its o
 **Flow**:
 1. Run `/aggregate`
 2. Reads learnings and retros from all registered projects
-3. New entries and cross-cutting patterns appended to `docs/process/cross-project-learnings.md`
+3. New entries and cross-cutting patterns appended to `docs/process/aggregation-log.md` under a new dated section
 5. Patterns may trigger template updates or `/propagate` actions
 
 ---
