@@ -274,6 +274,43 @@ Similar to Zapier but with a visual flow editor and often cheaper. Has an HTTP m
 
 ---
 
+### 3h. IronClaw (nearai/ironclaw)
+
+**What it is:** A Rust reimplementation of OpenClaw focused on privacy, local-first design, and native scheduling. Built by NEAR AI. Describes itself as "your secure personal AI assistant, always on your side."
+
+**GitHub:** https://github.com/nearai/ironclaw
+
+Key characteristics:
+- Native **Routines** — cron schedules, event triggers, and webhook handlers for background automation
+- **Heartbeat System** — proactive background execution for monitoring and maintenance
+- **WASM Sandbox** — untrusted tools run in isolated WebAssembly containers with capability-based permissions
+- **MCP Protocol** — connects to Model Context Protocol servers for additional capabilities
+- **Dynamic Tool Building** — describe a tool, IronClaw builds it as a WASM plugin without restart
+- **Persistent memory** — hybrid full-text + vector search (pgvector) with workspace filesystem
+- Multi-channel: REPL, HTTP webhooks, Telegram/Slack via WASM channels, web gateway with SSE/WebSocket
+- Docker Sandbox for isolated container execution with per-job tokens
+
+**Scheduling support:** Yes, first-class via Routines. Supports cron expressions, event-driven triggers, and webhook handlers — the only open-source tool in this doc with native scheduling *and* full agentic tool use.
+
+**Privacy / security stance:** Strongest in this survey. Local-first storage (encrypted), credential injection at host boundary with leak detection, endpoint allowlisting, prompt injection defenses. No telemetry.
+
+**Setup requirements:** Rust 1.85+, PostgreSQL 15+ with pgvector extension, NEAR AI account (authentication). More complex than GitHub Actions or n8n.
+
+**Maturity:** Very early — created 2026-02-03, reached v0.11.1 by 2026-02-23 (3 weeks). Velocity is high (multiple releases per day during initial development). 3,100+ stars. APIs and config format will change.
+
+**Limitations:**
+- NEAR AI account required for auth — potential vendor dependency
+- PostgreSQL + pgvector is a non-trivial self-hosting requirement
+- Too new to have production case studies
+- Rust build from source required for full customization
+
+**Sources:**
+- https://github.com/nearai/ironclaw
+- https://t.me/ironclawAI (Telegram community)
+- https://www.reddit.com/r/ironclawAI/
+
+---
+
 ## 4. Asana → AI Agent Integrations
 
 ### Current state
@@ -329,6 +366,7 @@ This requires engineering work but gives full agentic capability (Claude with to
 | Make.com + Claude | Yes | No | Yes | No | Stable |
 | Temporal + Claude API | Yes (durable) | Yes (durable) | Via custom code | Yes (via API) | Production-ready |
 | LangGraph + LangSmith | Yes (beta) | Yes | Via custom code | Yes | Beta |
+| IronClaw | Yes (native Routines) | Yes (Heartbeat) | Via custom code | Yes (WASM + MCP) | Early (v0.11) |
 | Asana AI Studio | Via Asana rules | No | Native | No (not Claude) | Early access |
 
 ---
@@ -351,8 +389,9 @@ This requires engineering work but gives full agentic capability (Claude with to
 
 ### Watch / Wait
 
-6. **Codex CLI scheduling** — OpenAI will likely add scheduling to their cloud Codex agent eventually. Not available yet.
-7. **Asana AI Studio with third-party models** — Asana could open their AI Studio to external models. Not available yet.
+6. **IronClaw** — first open-source tool combining native scheduling + full agentic tool use + privacy-first design. Too new (3 weeks) for production use, but architecture is sound and velocity is high. Revisit at v1.0.
+7. **Codex CLI scheduling** — OpenAI will likely add scheduling to their cloud Codex agent eventually. Not available yet.
+8. **Asana AI Studio with third-party models** — Asana could open their AI Studio to external models. Not available yet.
 
 ### Skip
 
