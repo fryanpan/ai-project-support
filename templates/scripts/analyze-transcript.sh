@@ -9,7 +9,7 @@
 #   Reading:  assistant_output_words / 150 wpm
 #   Typing:   user_input_words / 60 wpm
 #   Buffer:   1 min per turn (context switch overhead)
-#   Meld:     consecutive turns with overlapping buffers merge into one block
+#   Merge:    consecutive turns with overlapping buffers merge into one block
 #
 # Filters out system-injected messages:
 #   - Skill injections ("Base directory for this skill:")
@@ -104,7 +104,7 @@ jq -r '
    ($words | tostring), $tools, ($has_error | tostring), ($is_system | tostring), $preview] | @tsv
 ' "$JSONL_FILE" > /tmp/transcript_messages.tsv
 
-# Step 2: Group into turns, filter system messages, meld, and calculate stats
+# Step 2: Group into turns, filter system messages, merge overlapping, and calculate stats
 awk -F'\t' '
 BEGIN {
   turn = 0
@@ -217,27 +217,27 @@ END {
     buffered_min[i] = raw_min[i] + 1.0
   }
 
-  # Meld overlapping turns:
+  # Merge overlapping turns:
   # If turn[n] start + buffered_min[n] >= turn[n+1] start, merge them
   # Work with minute-of-day timestamps
-  meld_count = 0
+  merge_count = 0
   for (i = 1; i <= turn; i++) {
-    meld_start[i] = i  # default: each turn is its own meld group
-    meld_end[i] = i
-    is_melded[i] = 0
+    merge_start[i] = i  # default: each turn is its own group
+    merge_end[i] = i
+    is_merged[i] = 0
   }
 
   for (i = 1; i < turn; i++) {
-    if (is_melded[i]) continue
+    if (is_merged[i]) continue
     t_start = iso_to_epoch(turn_ts[i])
     t_end = t_start + buffered_min[i]
     j = i + 1
     while (j <= turn) {
       t_next = iso_to_epoch(turn_ts[j])
       if (t_end >= t_next) {
-        # Meld: extend the end
-        is_melded[j] = 1
-        meld_end[i] = j
+        # Merge: extend the end
+        is_merged[j] = 1
+        merge_end[i] = j
         t_end = t_next + buffered_min[j]
         j++
       } else {
@@ -247,13 +247,13 @@ END {
   }
 
   # Print per-turn table
-  printf "%s\n", "| Turn | Timestamp | User Words | Asst Words | Read (min) | Type (min) | Buffer | Turn Total | Melded? |"
+  printf "%s\n", "| Turn | Timestamp | User Words | Asst Words | Read (min) | Type (min) | Buffer | Turn Total | Merged? |"
   printf "%s\n", "|------|-----------|------------|------------|------------|------------|--------|------------|---------|"
 
   for (i = 1; i <= turn; i++) {
-    melded_flag = ""
-    if (is_melded[i]) melded_flag = "merged-up"
-    if (meld_end[i] > i) melded_flag = "group-start"
+    merged_flag = ""
+    if (is_merged[i]) merged_flag = "merged-up"
+    if (merge_end[i] > i) merged_flag = "group-start"
 
     turn_total = raw_min[i] + 1.0
     total_read += read_min[i]
@@ -262,30 +262,30 @@ END {
 
     printf "| %d | %s | %d | %d | %.1f | %.1f | 1.0 | %.1f | %s |\n",
       i, turn_ts[i], turn_user_words[i], turn_asst_words[i],
-      read_min[i], type_min[i], turn_total, melded_flag
+      read_min[i], type_min[i], turn_total, merged_flag
   }
 
-  # Calculate melded hands-on (deduplicating overlapping buffers)
-  melded_handson = 0
+  # Calculate adjusted hands-on (deduplicating overlapping buffers)
+  adjusted_handson = 0
   for (i = 1; i <= turn; i++) {
-    if (is_melded[i]) continue  # skip, counted in group start
-    if (meld_end[i] > i) {
-      # This is a meld group: sum raw times, but only 1 buffer for the whole group
+    if (is_merged[i]) continue  # skip, counted in group start
+    if (merge_end[i] > i) {
+      # This is a merge group: sum raw times, but only 1 buffer for the whole group
       group_raw = 0
-      for (k = i; k <= meld_end[i]; k++) {
+      for (k = i; k <= merge_end[i]; k++) {
         group_raw += raw_min[k]
       }
-      melded_handson += group_raw + 1.0
+      adjusted_handson += group_raw + 1.0
     } else {
-      melded_handson += raw_min[i] + 1.0
+      adjusted_handson += raw_min[i] + 1.0
     }
   }
 
   total_handson = total_read + total_type + total_buffer
   printf "\n**Raw hands-on: %.1f min** (reading: %.1f + typing: %.1f + buffer: %.1f)\n",
     total_handson, total_read, total_type, total_buffer
-  printf "**Melded hands-on: %.1f min** (overlapping turns merged, single buffer per group)\n",
-    melded_handson
+  printf "**Adjusted hands-on: %.1f min** (overlapping turns merged, single buffer per group)\n",
+    adjusted_handson
 }
 ' /tmp/transcript_messages.tsv
 

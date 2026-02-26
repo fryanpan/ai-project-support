@@ -18,13 +18,13 @@ Only run this skill when:
    **How to run the analysis:**
    - Find the transcript: glob `~/.claude/projects/<converted-cwd>/*.jsonl` sorted by modification time (convert cwd slashes to dashes, e.g., `/Users/me/myproject` → `-Users-me-myproject`). Pick the most recent.
    - Run the script: `templates/scripts/analyze-transcript.sh <path-to-jsonl>` (if in the metaproject), or find the script via `which analyze-transcript.sh` or locate it in the project's scripts/ directory.
-   - The script outputs: per-turn breakdown (user text, assistant word count, tools, errors) and timing stats (reading at 150 wpm, typing at 60 wpm, 1 min buffer per turn, with overlapping turns melded).
+   - The script outputs: per-turn breakdown (user text, assistant word count, tools, errors) and timing stats (reading at 150 wpm, typing at 60 wpm, 1 min buffer per turn, overlapping turns merged).
    - System-injected messages (skill injections, /mcp outputs, system reminders) are automatically filtered out.
 
    **What you do with the output:**
    - Read the turn-by-turn output to understand what happened
    - Group turns into high-level phases (plan, build, review, etc.) based on what was being worked on
-   - Use the melded hands-on time as the hands-on metric
+   - Use the adjusted hands-on time (overlapping turns merged) as the hands-on metric
    - Identify pain points from the turn data: errors, user corrections, repeated tool calls
 
    Present as a time breakdown table with proportional bars and a metrics summary:
@@ -46,7 +46,7 @@ Only run this skill when:
    | Metric | Duration |
    |--------|----------|
    | Total wall-clock | X hours |
-   | Hands-on (melded) | X hours (Y%) |
+   | Hands-on | X hours (Y%) |
    | Automated agent time | X hours (Y%) |
    | Idle/away | X hours (Y%) |
 
