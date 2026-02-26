@@ -25,6 +25,10 @@ Technical discoveries that should persist across sessions.
 - Don't use AskUserQuestion for retro feedback. Just pose the questions as plain text in the conversation and let the user type naturally. Structured question tools feel like a survey and force the user to answer everything at once.
 - The transcript finder must filter by project path, not just recency. With multiple Conductor worktrees running in parallel, globbing all `**/*.jsonl` by modification time will pick up the wrong session.
 - The Skill tool is synchronous — it can't run "in parallel" or "in the background." To run skill-like work in parallel, use a Task agent with explicit instructions instead.
+- Use `templates/scripts/analyze-transcript.sh` for transcript analysis — don't write custom Python or delegate to a subagent for JSONL parsing. The script uses jq+awk, needs no authorization, and handles system message filtering, turn melding, and hands-on time calculation deterministically.
+
+## Artifact Placement
+- Decide where an artifact lives before writing it — local file, Notion, or another repo. Switching mid-stream (write locally → delete → rewrite to Notion → create a new repo) costs ~10 min and creates unnecessary git noise.
 
 ## Project Reviews
 - Lead with findings, not recommendations. The most interesting thing is what we learned about the team, not what we think they should do.

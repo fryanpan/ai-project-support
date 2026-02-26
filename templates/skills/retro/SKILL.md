@@ -15,26 +15,25 @@ For the last two triggers, use a lightweight prompt: "Good moment for a quick re
 
 ## Steps
 
-1. **Session time analysis**: Read the actual conversation transcript JSONL file to extract real timestamps and produce a time breakdown. Do NOT estimate or guess times from memory. Note the current time before starting — you'll record how long this analysis took in the retro log.
+1. **Session time analysis**: Run the transcript analysis script to extract timing data. Do NOT write custom parsing code or use a subagent for JSONL extraction. Note the current time before starting — you'll record how long this analysis took in the retro log.
 
-   **How to read the transcript:**
-   - The transcript is at: `~/.claude/projects/<project-path>/<session-id>.jsonl`
-   - Find the correct path: the project directory path determines the subfolder under `~/.claude/projects/`. Convert the current working directory to the Claude projects path format (slashes become dashes, e.g., `/Users/me/myproject` → `-Users-me-myproject`), then glob for `~/.claude/projects/<converted-path>/*.jsonl` sorted by modification time. Only fall back to globbing all `~/.claude/projects/**/*.jsonl` if no match is found.
-   - **Verify before proceeding**: Read the first few lines of the JSONL file and confirm it contains messages about work done in this project. If the transcript doesn't match (e.g., it's from a different worktree), try the next most recent file or report that the transcript couldn't be found.
-   - Use a subagent (Task tool with `general-purpose` type) to read the JSONL file, extract timestamps from each JSON object, and calculate durations between phases
-   - Each line is a JSON object — look for timestamp fields (`timestamp`, `ts`, `createdAt`, or similar) and role fields (`user`/`human` vs `assistant`) to identify who was active when
+   **How to run the analysis:**
+   - Find the transcript: glob `~/.claude/projects/<converted-cwd>/*.jsonl` sorted by modification time (convert cwd slashes to dashes, e.g., `/Users/me/myproject` → `-Users-me-myproject`). Pick the most recent.
+   - Run the script: look for `analyze-transcript.sh` in the project's `scripts/` directory, or in `templates/scripts/` if this is the metaproject.
+   - The script outputs: per-turn breakdown (full user text, assistant word count, tools, errors) and timing stats (reading at 150 wpm, typing at 60 wpm, 1 min buffer per turn, with overlapping turns melded).
+   - System-injected messages (skill injections, /mcp outputs, system reminders) are automatically filtered out.
 
-   **What to calculate:**
-   - Break the session into phases based on what was being worked on (use user messages as phase boundaries)
-   - For each phase: start time, end time, duration in minutes
-   - **Counting hands-on time**: Gaps between agent completion and the next user message are hands-on time (user reading output, reviewing, deciding, typing), NOT idle time. Only count gaps of 10+ minutes with zero messages as idle. The user is also actively engaged during agent work — monitoring output, checking context, and doing concurrent terminal work. Measurable gaps are a floor, not a ceiling.
-   - Calculate totals: session wall-clock, hands-on time, automated agent time, idle time
+   **What you do with the output:**
+   - Read the turn-by-turn output to understand what happened
+   - Group turns into high-level phases (plan, build, review, etc.) based on what was being worked on
+   - Use the melded hands-on time as the hands-on metric
+   - Identify pain points from the turn data: errors, user corrections, repeated tool calls
 
    Present as a time breakdown table with proportional bars and a metrics summary:
 
    | Started | Phase | 👤 Hands-On Time | 🤖 Agent Time | Problems |
    |---------|-------|-----------------|---------------|----------|
-   | Feb 10 10:00am | Build (engine restart, voice recog, UI tweaks) | ██████ 60m | ███ 30m | ⚠ 5 fix cycles, race conditions |
+   | Feb 10 10:00am | Build (engine restart, voice recog, UI tweaks) | ██████ 60m | ███ 30m | ⚠ 5 fix cycles |
    | Feb 10 11:30am | Research (BT routing for AirPods + external mics) | | █████ 45m | |
    | Feb 10 1:00pm | Review (code review, docs, feedback log) | | ██ 15m | |
 
@@ -44,14 +43,14 @@ For the last two triggers, use a lightweight prompt: "Good moment for a quick re
    - **Empty cells**: Leave the column blank if that role wasn't involved in the phase
    - **Problems**: Inline with ⚠ marker — only for phases that had real friction or rework
    - **Sort**: Chronological (by start time)
-   - **Brevity**: Keep the table to 10 rows max. Start with high-level phases (plan, build, test, review) and only split a phase into sub-rows if it was long and had distinct chunky subparts. A 4-row table is better than a 12-row table. Include a brief parenthetical after the label explaining what was in the phase, e.g., "Build (edited 2 retro skills, tested format)" not just "Build".
+   - **Brevity**: Keep the table to 10 rows max. A 4-row table is better than a 12-row table.
 
    | Metric | Duration |
    |--------|----------|
    | Total wall-clock | X hours |
-   | Hands-on | X hours (Y%) |
+   | Hands-on (melded) | X hours (Y%) |
    | Automated agent time | X hours (Y%) |
-   | Idle/testing/away | X hours (Y%) |
+   | Idle/away | X hours (Y%) |
 
 2. **Key observations from transcript**: Before asking the user for feedback, identify patterns yourself:
    - Where did Claude work most independently? Why?
