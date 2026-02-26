@@ -8,7 +8,7 @@ Project-support doesn't build software directly. It manages, reviews, and improv
 
 ### Cross-Project Review
 1. Run `/aggregate` to pull learnings from all projects
-2. Review `knowledge/cross-project-learnings.md` for patterns
+2. Review `docs/process/aggregation-log.md` for patterns
 3. Use `/propagate` to push improvements to projects via PRs
 
 ### Research
@@ -27,6 +27,6 @@ Project-support doesn't build software directly. It manages, reviews, and improv
 
 ## Session Continuity
 - Reference `registry.yaml` for the list of managed projects
-- Read `knowledge/cross-project-learnings.md` for aggregated insights
+- Read `docs/process/aggregation-log.md` for aggregated insights
 - Read `research/` for current research findings
 - Check `docs/process/learnings.md` for metaproject-specific gotchas
