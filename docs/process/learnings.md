@@ -25,6 +25,10 @@ Technical discoveries that should persist across sessions.
 - Don't use AskUserQuestion for retro feedback. Just pose the questions as plain text in the conversation and let the user type naturally. Structured question tools feel like a survey and force the user to answer everything at once.
 - The transcript finder must filter by project path, not just recency. With multiple Conductor worktrees running in parallel, globbing all `**/*.jsonl` by modification time will pick up the wrong session.
 - The Skill tool is synchronous — it can't run "in parallel" or "in the background." To run skill-like work in parallel, use a Task agent with explicit instructions instead.
+- Use `analyze_transcript.py` (lives in the retro skill directory) for transcript analysis — don't write custom scripts or delegate to a subagent for JSONL parsing. The script is pure Python (stdlib only), needs no authorization when called from the skill directory, and handles system message filtering, overlapping turn merging, and hands-on time calculation deterministically. Tests in `tests/test_analyze_transcript.py`.
+
+## Artifact Placement
+- Decide where an artifact lives before writing it — local file, Notion, or another repo. Switching mid-stream (write locally → delete → rewrite to Notion → create a new repo) costs ~10 min and creates unnecessary git noise.
 
 ## Project Reviews
 - Lead with findings, not recommendations. The most interesting thing is what we learned about the team, not what we think they should do.
@@ -53,3 +57,10 @@ Technical discoveries that should persist across sessions.
 ## Working with Users
 - When the user says "set up X for the team," they often mean adoption guidance (how to install, how to use), not config files to commit. Ask which they mean if ambiguous.
 - Short, direct user corrections ("don't bury the lede", "stop mentioning feature chains") are the most productive feedback. Don't over-explain in response — just fix it.
+- Before building a tool or script, ask the user about language preference and testing expectations. Don't assume bash is fine — the user may strongly prefer Python (for testability) or another language. A 30-second question saves a full rewrite.
+
+## Python Environment
+- When `python3` commands fail with permission errors or missing packages, check whether a version manager (uv, pyenv) is installed before retrying. `which uv && uv python list` or `which pyenv && pyenv versions` diagnoses the issue faster than repeated shell attempts.
+
+## Git Hard Links
+- Git does not preserve hard links across checkouts. When two files share an inode (e.g., a script hard-linked into two skill directories), `git checkout` replaces them with independent copies. Track both files in git and accept they'll diverge — or use a symlink if one canonical location is acceptable.
