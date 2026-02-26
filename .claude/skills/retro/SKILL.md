@@ -17,7 +17,7 @@ Only run this skill when:
 
    **How to run the analysis:**
    - Find the transcript: glob `~/.claude/projects/<converted-cwd>/*.jsonl` sorted by modification time (convert cwd slashes to dashes, e.g., `/Users/me/myproject` → `-Users-me-myproject`). Pick the most recent.
-   - Run the script: `templates/scripts/analyze-transcript.sh <path-to-jsonl>` (if in the metaproject), or find the script via `which analyze-transcript.sh` or locate it in the project's scripts/ directory.
+   - Run the script: `python3 scripts/analyze_transcript.py <path-to-jsonl>` — the script lives in `scripts/` alongside this SKILL.md.
    - The script outputs: per-turn breakdown (user text, assistant word count, tools, errors) and timing stats (reading at 150 wpm, typing at 60 wpm, 1 min buffer per turn, overlapping turns merged).
    - System-injected messages (skill injections, /mcp outputs, system reminders) are automatically filtered out.
 
