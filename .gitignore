@@ -2,3 +2,7 @@ registry.yaml
 docs/process/retrospective.md
 docs/process/propagation-log.md
 .context/
+.worktrees/
+.venv/
+__pycache__/
+.pytest_cache/
