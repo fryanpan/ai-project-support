@@ -26,7 +26,7 @@ After planning, choose an execution approach. Present these options to the user:
 
 | Approach | When to use | How it works |
 |----------|-------------|--------------|
-| **Executing Plans** (default) | Most tasks. You want human checkpoints between batches. | `superpowers:executing-plans` — creates a worktree, executes in batches of 3 tasks, pauses for review between batches. |
+| **Executing Plans** (default) | Most tasks. You want human checkpoints at the end. | `superpowers:executing-plans` — creates a worktree, executes all tasks in a single pass, then reports for review. Do NOT batch into groups of 3 — execute everything, then pause. |
 | **Subagent-Driven Development** | Tasks are independent. You want fast iteration with automated review. | `superpowers:subagent-driven-development` — stays in current session, dispatches a fresh subagent per task with two-stage review (spec compliance, then code quality). |
 | **Agent Team** (experimental) | Highly parallel work where 3+ tasks can run simultaneously with no shared state. | `TeamCreate` + spawn teammates — named agents coordinate via task list and messages, work in true parallel. Requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` env var. |
 
@@ -36,6 +36,33 @@ After planning, choose an execution approach. Present these options to the user:
 3. Otherwise → **Subagent-Driven Development** (sequential but automated)
 
 If unsure, default to **Executing Plans** — it's the most predictable.
+
+## Output Destination
+
+Each project should define where standalone deliverables (docs, plans, research, reviews) are written. Check the project's CLAUDE.md for a `docs_destination` convention. If none is set, ask the user on first encounter and record it.
+
+Common destinations:
+- **Local file** (`docs/` directory in repo)
+- **Notion** (specific workspace/section)
+- **Other** (WordPress, Google Docs, etc.)
+
+If a Notion URL appeared earlier in the session, default to writing there unless the project convention says otherwise.
+
+## Autonomy
+
+- When the user has approved a plan, execute all phases without pausing for checkpoint approval. Only stop when you've discovered something that changes the scope or risk of the original request.
+- When multiple clarifying questions are needed, batch them into a single message. Do not ask one question at a time.
+- Do not re-research information the user has already provided in the current session.
+
+## Tool & Technology Choices
+
+- Prefer current best practices for the task at hand (e.g., `uv` over `pip` for Python dependency management).
+- When choosing between viable approaches with meaningful tradeoffs, surface the choice and reasoning before implementing — especially for anything involving external risk (rate limits, bans, third-party services).
+
+## Verification
+
+- After implementing UI changes or bug fixes, verify the result before reporting done. Never mark a UI task complete based solely on code being written — state what verification you performed and what you could not verify.
+- At the start of any worktree session involving commits, check whether the worktree is current with its base branch. Report the result before beginning implementation.
 
 ## Implementation
 
