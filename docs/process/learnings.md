@@ -48,6 +48,13 @@ Technical discoveries that should persist across sessions.
 ## GitHub API
 - For brand-new repos with no commits: clone locally, make an initial commit, then push to create `main`.
 
+## Aggregate Workflow
+- When reviewing aggregate outputs, GitHub PR diff comments are an effective async review pattern — the agent can address all comments in a single follow-up pass without back-and-forth
+- When proposing propagation actions in `docs/process/aggregation-log.md`, reconcile against: (1) what `templates/` already contains, (2) what the propagation log shows, and (3) what shared plugins (e.g., superpowers) already cover — learnings from older retros may predate major tooling changes and recommend fixes that are now redundant
+
+## Tooling
+- The `Write` and `Edit` tools require a file to have been read "recently" in the same session — if many tool calls have elapsed since the initial read, re-read the file immediately before writing/editing to avoid "file not read yet" errors
+
 ## Working with Users
 - When the user says "set up X for the team," they often mean adoption guidance (how to install, how to use), not config files to commit. Ask which they mean if ambiguous.
 - Short, direct user corrections ("don't bury the lede", "stop mentioning feature chains") are the most productive feedback. Don't over-explain in response — just fix it.

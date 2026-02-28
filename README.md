@@ -54,9 +54,8 @@ This creates symlinks to `~/dev/project-support/` so all worktrees share the sam
 
 ```
 templates/        Canonical versions of shared skills, rules, docs, settings
-knowledge/        Aggregated cross-project learnings and patterns
 research/         Research findings on agent techniques and tools
-docs/             This project's own process docs and product design
+docs/             Process docs, product design, and cross-project learnings
 scripts/          Utility scripts (worktree setup, etc.)
 .claude/skills/   Skills that power the /slash commands
 .claude/rules/    Rules that guide agent behavior
