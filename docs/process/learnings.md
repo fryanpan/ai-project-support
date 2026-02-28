@@ -14,7 +14,7 @@ Technical discoveries that should persist across sessions.
 ## Project Setup
 - When setting up new projects, do the work in the main thread using this repo's templates and skills — don't delegate to subagents. Subagents can't access project skills (`/propagate`, `/new-project`), struggle with cross-repo file access, and end up reinventing what the skills already do.
 - Multi-repo setup burns through context fast (2 compactions in ~90 min). Commit between repos to preserve progress — if context runs out mid-session, uncommitted work in earlier repos is safe.
-- `mcp__github__push_files` cannot access private repos — skip straight to `git clone` + write files + `git push` for private repos.
+- Use `gh` CLI and local git for all GitHub operations — the GitHub MCP plugin doesn't work reliably (can't access private repos, 404s on new repos with no commits, etc.).
 
 ## Propagation
 - Always use worktrees when making changes to target projects — never edit the main worktree directly
@@ -26,6 +26,7 @@ Technical discoveries that should persist across sessions.
 - The transcript finder must filter by project path, not just recency. With multiple Conductor worktrees running in parallel, globbing all `**/*.jsonl` by modification time will pick up the wrong session.
 - The Skill tool is synchronous — it can't run "in parallel" or "in the background." To run skill-like work in parallel, use a Task agent with explicit instructions instead.
 - Use `analyze_transcript.py` (lives in the retro skill directory) for transcript analysis — don't write custom scripts or delegate to a subagent for JSONL parsing. The script is pure Python (stdlib only), needs no authorization when called from the skill directory, and handles system message filtering, overlapping turn merging, and hands-on time calculation deterministically. Tests in `tests/test_analyze_transcript.py`.
+- For cross-session analysis (e.g., finding intervention patterns across many sessions), build on top of `analyze_transcript.py` by importing `extract_messages()` and `group_into_turns()` — don't rewrite JSONL parsing from scratch. Layer additional analysis (correction detection, permission patterns) on the properly parsed turns.
 
 ## Artifact Placement
 - Decide where an artifact lives before writing it — local file, Notion, or another repo. Switching mid-stream (write locally → delete → rewrite to Notion → create a new repo) costs ~10 min and creates unnecessary git noise.
@@ -45,7 +46,7 @@ Technical discoveries that should persist across sessions.
 - When the user has already described the problem space clearly in a prior invocation (e.g., a detailed /new-project request), fast-track to proposing a first-cut design after 1-2 targeted questions — don't run the full clarifying sequence. The user will feel like they're repeating themselves if you ask about things they already covered.
 
 ## GitHub API
-- `mcp__github__push_files` returns 404 on a brand-new repo with no commits (no default branch exists yet). Workaround: clone the repo locally, make an empty init commit, push to create `main`, then use local git for all subsequent file operations.
+- For brand-new repos with no commits: clone locally, make an initial commit, then push to create `main`.
 
 ## Aggregate Workflow
 - When reviewing aggregate outputs, GitHub PR diff comments are an effective async review pattern — the agent can address all comments in a single follow-up pass without back-and-forth
