@@ -48,11 +48,57 @@ Common destinations:
 
 If a Notion URL appeared earlier in the session, default to writing there unless the project convention says otherwise.
 
+## Decision Framework
+
+When facing a decision during planning or implementation, use this framework to decide whether to act autonomously or ask for human input:
+
+**Reversible — decide autonomously, log to `docs/product/decisions.md`:**
+- File structure, naming conventions, code organization
+- Implementation approach selection
+- Package and dependency choices
+- Test strategy and error handling patterns
+- DB schema changes (for non-public APIs)
+- API contract changes (for non-public APIs)
+
+**Hard to reverse — batch all questions and present together:**
+- Data deletion or loss scenarios
+- Force pushes or destructive git operations
+- Architectural decisions affecting multiple systems
+- External service integrations with billing or security implications
+
+**Rule of thumb:** If it's easy to change later and low-risk, make your best call and document it in `decisions.md`. If it's hard to reverse or high-risk, batch all pending questions and present them together in a single message.
+
+**Project override:** Projects with public APIs or mature schemas where users depend on specific contracts should move DB schema and API contract changes to the "hard to reverse" category. Add a note in the project's `workflow-conventions.md` to override this default.
+
 ## Autonomy
 
 - When the user has approved a plan, execute all phases without pausing for checkpoint approval. Only stop when you've discovered something that changes the scope or risk of the original request.
 - When multiple clarifying questions are needed, batch them into a single message. Do not ask one question at a time.
 - Do not re-research information the user has already provided in the current session.
+- Apply the Decision Framework above at every decision point — during brainstorming, planning, implementation, and review. Default to autonomous action for reversible decisions.
+
+## Superpowers Overrides
+
+These conventions modify how superpowers plugin skills behave in this project:
+
+### Brainstorming
+- Present all clarifying questions together in a single message, not one at a time.
+- For reversible design decisions, make the call autonomously and document it in `decisions.md`. Only pause for human input on decisions that are hard to reverse.
+- Present the full design in one pass for approval, not section by section.
+- When the user has already described the problem space clearly, fast-track to proposing a design after 1-2 targeted questions.
+
+### Executing Plans
+- Do NOT pause for feedback between batches. Execute all tasks in a single pass, then report results.
+- Only stop mid-execution if blocked or facing a decision that is hard to reverse per the Decision Framework.
+- Verification gates (tests must pass, verification-before-completion) are still enforced — these are quality checks, not human checkpoints.
+
+### Finishing a Development Branch
+- Default to creating a PR without asking — this is the most reversible completion option.
+- Only prompt the user if tests are failing or the target branch is ambiguous.
+
+### Retro
+- In human-led sessions: ask for feedback in one prompt (not multiple rounds), then propose and execute approved actions.
+- In autonomous sessions (no human present): analyze the transcript, log findings, and execute low-risk improvements (doc updates, learnings) without asking. Skip actions that would change skill behavior or CLAUDE.md without human review.
 
 ## Tool & Technology Choices
 

@@ -9,10 +9,10 @@ flowchart LR
 
 | Step | Powered By | Modulated By |
 |------|-----------|-------------|
-| **Plan** | `superpowers` plugin (writing-plans, brainstorming) | `workflow-conventions` rule (plan file location, plan structure) |
-| **Implement** | `superpowers` plugin (executing-plans, test-driven-development, subagent-driven-development) | `workflow-conventions` rule (testing standards, code review) |
+| **Plan** | `superpowers` plugin (writing-plans, brainstorming) | `workflow-conventions` rule (plan file location, plan structure, decision framework, superpowers overrides) |
+| **Implement** | `superpowers` plugin (executing-plans, test-driven-development, subagent-driven-development) | `workflow-conventions` rule (testing standards, code review, decision framework) |
 | **Code Review** | `superpowers` plugin (requesting-code-review, verification-before-completion) + `code-review` plugin | `workflow-conventions` rule |
-| **Retro** | Custom `/retro` skill | `feedback-loop` rule (triggers). Retro invokes `claude-md-management` plugin (claude-md-improver) |
+| **Retro** | Custom `/retro` skill (supports human-led and autonomous modes) | `feedback-loop` rule (triggers). Retro invokes `claude-md-management` plugin (claude-md-improver) |
 
 ## Dependencies
 
@@ -45,9 +45,18 @@ Everything this workflow relies on — plugins must be enabled in `.claude/setti
 - Read `docs/process/learnings.md` for technical gotchas
 - Read `docs/process/retrospective.md` for process improvements
 
+## Decision Making
+
+At every decision point — during planning, implementation, or review — apply the Decision Framework from `workflow-conventions`:
+- **Reversible decisions** (naming, approach, packages, non-public API/schema changes): decide autonomously, log to `docs/product/decisions.md`
+- **Hard-to-reverse decisions** (data deletion, multi-system architecture, security/billing integrations): batch questions and ask
+
+This applies in both human-led and autonomous sessions. The only difference is the communication channel.
+
 ## Feedback Loops
 
-- After completing a feature: Ask "Does this work? Anything to improve?"
+- After completing a feature (human-led): Ask "Does this work? Anything to improve?"
+- After completing a feature (autonomous): Log observations directly
 - After creating a PR or addressing code review: Offer `/retro` (if one hasn't happened yet)
 - After ~2-3 hours or a major feature: Run `/retro`
 - Log insights in `docs/process/retrospective.md` and `docs/process/learnings.md`
