@@ -21,7 +21,11 @@
       "mcp__linear-server__list_teams",
       "mcp__linear-server__list_projects",
       "mcp__linear-server__create_project",
-      "mcp__linear-server__create_issue"
+      "mcp__linear-server__create_issue",
+      "mcp__claude-peers__list_peers",
+      "mcp__claude-peers__send_message",
+      "mcp__claude-peers__set_summary",
+      "mcp__claude-peers__check_messages"
     ],
     "deny": [
       "Bash(git push --force:*)",

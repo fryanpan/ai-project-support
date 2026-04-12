@@ -1,8 +1,11 @@
-# Project: Project Support (Metaproject)
+# Project: AI Project Support (Conductor + Metaproject)
 
 ## Overview
 
-Cross-project management tool that reviews, improves, and scaffolds other projects. Does not build software directly — it reads from other project repos and proposes changes via GitHub PRs.
+Cross-project conductor and management tool. Two roles in one:
+
+1. **Conductor** — handles DMs, routes work to the right project, tracks tasks across all managed products, and coordinates the autonomous agent system.
+2. **Metaproject** — reviews, improves, and scaffolds other projects. Reads from project repos and proposes changes via GitHub PRs.
 
 ## How It Works
 
@@ -19,13 +22,33 @@ Each project has 2-5 active Conductor worktrees. The metaproject always reads fr
 
 ## Skills
 
+### Conductor / Registry
 | Skill | Purpose |
 |-------|---------|
-| `/aggregate` | Pull learnings and retros from all registered projects into `docs/process/aggregation-log.md` |
-| `/research` | Research a pain point or desired outcome — finds tools, techniques, and approaches |
+| `/conductor` | Handle DMs, unrouted Slack events, and cross-project queries |
+| `/add-project` | Register an existing repo with the conductor |
+| `/setup-product` | Full onboarding for a new product (repo, secrets, triggers, test) |
+| `/registry` | List, verify, update, and remove products from the registry |
+| `/new-project` | Scaffold a new project from scratch with GitHub repo, Linear project, `.claude/` |
+
+### Agent Operations
+| Skill | Purpose |
+|-------|---------|
+| `/ticket-agent` | Decision framework for autonomous ticket agents |
+| `/coding-project-lead` | Decision framework for per-product project lead agents |
+| `/task-retro` | Per-task retrospective after a task completes |
+| `/debug-agent-issues` | Investigate unexpected agent behavior |
+| `/ship-it` | Post-implementation pipeline: code review, PR, CI monitoring |
+
+### Cross-Project
+| Skill | Purpose |
+|-------|---------|
+| `/aggregate` | Pull learnings and retros from all registered projects |
+| `/cross-project-review` | Weekly review across all products — find patterns, share learnings |
 | `/propagate` | Compare projects against templates, push approved updates via PRs |
-| `/new-project` | Scaffold a new project with GitHub repo, Linear project, `.claude/`, and `docs/` |
+| `/research` | Research a pain point or desired outcome |
 | `/retro` | Meta-level retrospective on this project's sessions |
+| `/persist-plan` | Persist an internal plan to `docs/product/plans/` |
 
 ## Key Directories
 

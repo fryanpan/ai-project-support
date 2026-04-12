@@ -137,6 +137,21 @@ Commit early and often to create an incremental record. Key checkpoints:
 
 Use descriptive commit messages that explain *why*, not just *what*.
 
+## Post-Implementation
+
+When all implementation tasks are complete and tests pass, invoke the `ship-it` skill **before** handing control back to the user. This runs code review, creates the PR, and monitors CI/Copilot feedback automatically.
+
+## Notifying the Conductor
+
+After completing a task (PR merged, research delivered, or work otherwise done), notify the conductor session via claude-peers:
+
+1. Call `list_peers` with `scope: "machine"` to find the conductor
+2. Identify the conductor by its summary containing "Conductor" or by its `cwd` being an `ai-project-support` repo
+3. Call `send_message` with a brief completion summary:
+   > "Task complete: [one-line description of what was done]. PR: [url if applicable]"
+
+If no conductor peer is found, skip silently — don't block on it.
+
 ## Diagrams
 
 - Use mermaid for all diagrams (architecture, workflows, dependencies)
