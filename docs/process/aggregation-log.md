@@ -4,6 +4,123 @@ History of `/aggregate` passes. Each section records what was found and synthesi
 
 ---
 
+## 2026-04-13
+
+First aggregation since 2026-02-24 — a ~50 day gap. Covers 8 projects with new content; `openclaw-config`, `booster-frontend`, and `booster-backend` contributed nothing (the two booster worktrees don't exist locally right now). Cloudflare Workers / Agent SDK headless-execution learnings from the retired product-engineer infrastructure were **deliberately excluded** — they were just retired from this metaproject's own `learnings.md` in PR #24 and should not propagate back in.
+
+### Cross-Cutting Patterns
+
+#### Notion MCP reliability — new failure modes
+
+**Observed in:** tasks (2026-02-25, 2026-02-23), blog-assistant (2026-02-25, 2026-02-26, 2026-03-09)
+
+**Description:** Three new failure patterns on top of the "retry first attempt" pattern from the 2026-02-24 aggregation:
+
+- `replace_content_range` fails silently on large page updates — default to `replace_content`
+- **Parallel Notion mutations are unreliable** — blog-assistant saw 8/9 parallel comment calls fail from text-matching ambiguity; sequential retries worked instantly. Sequentialize Notion writes.
+- **`notion-fetch` ↔ `notion-update-page` URL format mismatch** — fetch returns URLs wrapped in `{{...}}` but update expects plain URLs + `<mention-page>` tags. Requires transformation between read and write.
+
+**Reconciliation:** `templates/rules/notion-mcp.md` already exists from the 2026-02-24 pass with the first-attempt-retry pattern. These three new modes are additions, not contradictions.
+
+**Propagation:** Append the three new failure modes to `templates/rules/notion-mcp.md`, then `/propagate` to all Notion-using projects.
+
+---
+
+#### Subagents (Task tool) have no WebSearch / WebFetch access
+
+**Observed in:** tasks (Berlin apartment search abandoned after ~27 min; Windows laptop research; Toronto lawyer research)
+
+**Description:** Background agents dispatched via the `Task` tool (and Agent Teams teammates) cannot call `WebSearch` or `WebFetch`. Projects that try to parallelize research via agent teams get stuck when a teammate needs to look something up. Keep web research in the main session; reserve subagents for synthesis, local-file reads, and non-web parallel work.
+
+**Reconciliation:** Not documented in `templates/rules/workflow-conventions.md`'s Execution Strategy section. No existing rule covers it.
+
+**Propagation:** Add a one-liner to `templates/rules/workflow-conventions.md` under Execution Strategy → Agent Team: *"Agent teams cannot use WebSearch/WebFetch. Keep web research in the main session."*
+
+---
+
+#### Grep-before-simplify as a refactor definition of done
+
+**Observed in:** bike-tool (BC-258 SafetyClass simplification, 2026-04-03; Berlin hardcoded geocoding migration, 2026-04-04)
+
+**Description:** When simplifying code or removing an abstraction, grep all usages first and treat "zero remaining usages + tests still pass" as the definition of done. When an abstraction maps 1:1 to a simpler primitive, flag the redundancy immediately instead of interpreting "simplify" as "reduce visible complexity." The SafetyClass simplification took 4 user prompts to converge because the agent kept trying to reduce visible complexity rather than questioning whether the abstraction belonged.
+
+**Reconciliation:** Not in templates. `superpowers:subagent-driven-development`'s two-stage review catches some of this but doesn't explicitly require grep-before-refactor.
+
+**Propagation:** **Emerging — only one project observed so far.** Not propagating yet. Re-evaluate next aggregation; if it shows up in a second project, add to `templates/rules/workflow-conventions.md`.
+
+---
+
+### Additional Project Observations
+
+Project-specific learnings that don't yet rise to a cross-cutting pattern. Grouped by project; source files have the full context.
+
+#### health-tool (since 2026-02-25)
+- **Python / uv:** `uv sync --extra dev` required in new worktrees — pytest is in optional dev deps and new worktrees won't have them
+- **Chrome extension URLs:** Can't screenshot or run JavaScript against `chrome-extension://` URLs — use `read_page` and `find` instead
+- **Sound synthesis:** `tanhf()` soft saturation is cleaner than hard clipping for additive synthesis
+- **Field testing catches what code review misses:** A DSP silence bug (tap on `outputVolume=0` node) only surfaced in field testing, not in review or unit tests
+- **Process:** Check if a barrier is trivially removable before building a workaround
+- **Parallel agent teams:** Two context-window hits during one large parallel run added ~30 min of overhead — plan for it
+- **iOS audio routing:** AirPods + external Bluetooth speaker requires time-multiplexed session switching, not simultaneous output
+
+#### bike-tool (since 2026-03-31)
+- **Canvas rendering for perf:** React `<Polyline>` per OSM way is slow; `L.LayerGroup` + `L.canvas()` is 5–10× faster and still supports Leaflet tooltip hit-testing. Moving from JSX to string templates requires `escapeHtml()`
+- **Tooling gotcha:** `bunx tsc --noEmit` downloads a wrong npm package literally named `tsc`. Use `bun test` + the project's local vite build instead
+- **OSM bicycle tagging:** `bicycle_network >= 1` tests route membership, NOT `bicycle_road=yes`. Most Berlin Fahrradstrassen lack route membership and were silently misclassified — correct field is `edge.bicycle_road` boolean. Classification must be profile-aware: `classifyEdge(profileKey)`
+- **Integration test drift:** Fixed thresholds like `quality.bad < 0.5` break after model improvements even when the change is good — re-tune after classification changes
+- **Type annotations in subagent work:** Objects spread into string-keyed maps need explicit `Record<string, string>` typing, or subagents miss it and cause `URLSearchParams` errors
+- **Data-first coding:** Posting the full classification table to Slack before writing code caught real inconsistencies (footway great vs good, share_busway training differences)
+- **Cloudflare Worker secret layout:** Keeping proxy + feedback in one Worker keeps secrets co-located. A precision-6 polyline decoder requires a unit test — the 1e6 vs 1e5 constant is silent if wrong. No deployed test environment at PR time means secrets must be set up out-of-band
+- **Valhalla `trace_attributes`** for segment coloring was the right tool
+
+#### personal-crm (since 2026-03-01)
+- **LinkedIn Voyager API intercept:** Capture full experience/education data from the main page load instead of scraping sub-pages
+- **Top bot signals to defeat:** Predictable 3-page navigation, direct-URL goto with no referrer, zero feed/search activity, JS `window.scrollBy()`, linear mouse paths, zero keyboard activity, single tab
+- **Realistic input events:** `page.mouse.wheel(0, N)` fires real `wheel` DOM events; `page.mouse.move()` is linear — interpolate with cubic bezier for natural paths
+- **Verify after slug match:** Check `page.url` after a slug-based substring match — scraping the wrong profile is silent otherwise
+- **Planning wins:** A detailed plan enabled 7 tasks across 3 batches with only 2 user interactions; the code review subagent caught 7 real issues (wrong-profile click, infinite scroll, dead code, missing tests) before PR
+
+#### tasks (since 2026-02-25)
+- **Agent teams for research:** Debate / challenge structures surface nuanced findings (Windows laptop review caught X1 Carbon OLED coating nuance, Surface Laptop 7 return rates, Adobe InDesign ARM failures). But ~50% of turns can be idle-notification acknowledgments — this is normal noise, not a failure signal
+- **Domain gotcha — German real estate:** "2-Zimmer" = 2 rooms total (1 bedroom + living room), NOT 2 bedrooms. Need "3-Zimmer" for a true 2-bedroom. "Kernsaniert Altbau" still carries mold risk
+- **Brainstorming criteria up front:** A 5-question Q&A before research shapes the effective criteria and prevents mid-session redirects
+- **ImmoScout blocks WebFetch** (specific instance of the subagent web-tool limitation flagged above)
+- **Research iteration:** Logistical constraints (availability, timeline, display baseline) often surface only after a v1 and require a full re-research — assume iteration, don't expect one-shot
+
+#### givewell-impact (since 2026-03-05)
+- **Satori / OG image generation:** No variable fonts (use static TTF), no `dotted` border, flexbox-only layout, inline styles only (no Tailwind), `Buffer.buffer` can return `SharedArrayBuffer` (create a fresh `ArrayBuffer` and copy via `Uint8Array`), font CDN URLs go stale — commit TTFs or pin a versioned path
+- **Next.js scaffolding:** `create-next-app` refuses to run in a non-empty directory — scaffold to `/tmp/...`, then move
+- **Visual sign-off:** Interactive HTML mockups in a browser are dramatically faster than ASCII art for design approval
+- **Plans should specify API input validation explicitly** — spec quality review catches missing validation only if the plan mentions it
+
+#### blog-assistant (since 2026-02-25)
+- **Editorial feedback that lands:** Structural / flow / factual review works; prose rewrite suggestions consistently miss voice — let the author rewrite
+- **Notion + WordPress image handoff:** Notion images use temporary signed S3 URLs that expire within hours — can't auto-transfer to WordPress
+- **Concurrent edit collision:** WordPress browser editor overwrites API edits if the user has the post open in the editor
+- **Suggested Edits feature not available via API/MCP** (as of Feb 2026)
+- **Cold-start MCP latency dominates active time** — one editorial pass was 39 min of 65 min spent on Notion MCP round trips
+- **Source verification as a background agent caught a real issue** (ICER source didn't back the claim) — worth running even when sources look solid
+
+#### octoturtle-assistant (since 2026-03-24)
+- **Map usability for kid routes:** Pre-attentive processing is the design bar — high contrast, bold colors, distinct patterns, large icons. Official maps (CyclOSM, InfraVelo, BBBike, ADFC) with subtle shading fail for glance-while-biking. Bright green thick lines for car-free, orange for protected, gray/red for avoid
+- **OSM data quality:** ±2–30% concordance with official data for urban/rural bicycle infrastructure; known gaps in car-free park paths, parent-specific context, surface quality. Tools: Overpass Turbo, Bicycle Tags Map, ID/JOSM editors
+- **German rail discovery:** DB does NOT surface ČD-operated EC/RJ trains for domestic German boarding (Prague–Berlin corridor) — cross-reference with czech-transport.com, vagonweb.cz, DB/cd.cz/ÖBB/Trainline. Helix folding bikes travel free as luggage (58×64×23 cm folded). Deutschland-Ticket covers regional only, NOT IC/ICE/EC/RJ
+- **Deliverable placement:** Research deliverables go to Notion, not `docs/product/plans/`. The repo is only agent config, process learnings, and decisions
+
+---
+
+### Recommendations for `/propagate`
+
+1. **Append new Notion MCP failure modes** to `templates/rules/notion-mcp.md` (3 new flavors from Cross-Cutting Patterns above). Then `/propagate` to all projects that use Notion MCP: health-tool, bike-tool, personal-crm, tasks, givewell-impact, blog-assistant, octoturtle-assistant, family-bike-map.
+
+2. **Add subagent web-tool limitation** to `templates/rules/workflow-conventions.md` under Execution Strategy → Agent Team. One-liner. Then `/propagate` to all projects using Agent Teams (especially tasks).
+
+3. **Do not propagate grep-before-simplify yet** — single-project observation. Revisit next aggregation.
+
+4. **Family-bike-map vs bike-tool duplication:** family-bike-map contributed zero net new content this pass — its retros duplicate bike-tool's (same work, two repos). Consider whether to (a) symlink one retros file to the other, (b) rename family-bike-map's repo as the canonical one, or (c) accept the duplication. Flag for Bryan — not a propagation action.
+
+---
+
 ## 2026-02-24
 
 ### Cross-Cutting Patterns
