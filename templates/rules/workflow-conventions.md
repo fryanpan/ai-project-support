@@ -143,11 +143,11 @@ When all implementation tasks are complete and tests pass, invoke the `ship-it` 
 
 ## Notifying the Conductor
 
-After completing a task (PR merged, research delivered, or work otherwise done), notify the conductor session via claude-peers:
+After completing a task (PR merged, research delivered, or work otherwise done), notify the conductor session via claude-hive:
 
-1. Call `list_peers` with `scope: "machine"` to find the conductor
-2. Identify the conductor by its summary containing "Conductor" or by its `cwd` being an `ai-project-support` repo
-3. Call `send_message` with a brief completion summary:
+1. Call `mcp__claude-hive__list_peers` with `scope: "machine"` to find the conductor.
+2. Identify the conductor by its summary containing "Conductor" (peers set their role via `set_summary` on startup).
+3. Call `mcp__claude-hive__send_message` with `to_stable_id` (preferred over `to_id` — stable IDs survive session restarts) and a brief completion summary:
    > "Task complete: [one-line description of what was done]. PR: [url if applicable]"
 
 If no conductor peer is found, skip silently — don't block on it.
