@@ -15,9 +15,9 @@ Append an existing repo to `registry.yaml` so the conductor can find and coordin
 ## Steps
 
 1. **Gather info** (ask the user if not provided):
-   - **Name** — kebab-case, e.g., `health-tool`. Used as the registry key and the local directory name.
+   - **Name** — kebab-case, e.g., `example-project`. Used as the registry key and the local directory name.
    - **Local path** — usually `~/dev/<name>`
-   - **GitHub repo** — `<owner>/<repo>`, e.g., `fryanpan/health-tool`
+   - **GitHub repo** — `<owner>/<repo>`, e.g., `your-org/example-project`
    - **Linear team** — name + key, if the project uses Linear
 
 2. **Verify the path exists and is a git repo:**
