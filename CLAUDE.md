@@ -15,7 +15,7 @@ Cross-project conductor and management tool. Two roles in one:
 **Before reading from a project**, ensure freshness: `git -C <path> pull --ff-only` to update to latest origin/main. If pull fails (dirty worktree or diverged history), investigate before reading.
 
 ### Cross-Project Changes
-Never edit files in other project repos directly. Always propose changes via GitHub PRs using `mcp__github__push_files` + `mcp__github__create_pull_request`, or `gh pr create --repo <repo>`.
+Never edit files in other project repos directly. Always propose changes via GitHub PRs using `gh pr create --repo <repo>`. The GitHub MCP plugin is unreliable for private repos and new repos — see `docs/process/learnings.md`.
 
 ### Worktree Interaction
 Each project has 2-5 active Conductor worktrees. The metaproject always reads from the main worktree at `~/dev/{project}`. Feature branch worktrees are not read — they may have uncommitted or in-progress work.
@@ -25,26 +25,21 @@ Each project has 2-5 active Conductor worktrees. The metaproject always reads fr
 ### Conductor / Registry
 | Skill | Purpose |
 |-------|---------|
-| `/conductor` | Handle DMs, unrouted Slack events, and cross-project queries |
-| `/add-project` | Register an existing repo with the conductor |
-| `/setup-product` | Full onboarding for a new product (repo, secrets, triggers, test) |
+| `/conductor` | Coordinate peer Claude Code sessions across managed products via claude-hive |
+| `/add-project` | Append an existing repo to `registry.yaml` |
 | `/registry` | List, verify, update, and remove products from the registry |
-| `/new-project` | Scaffold a new project from scratch with GitHub repo, Linear project, `.claude/` |
+| `/new-project` | Scaffold a new project from scratch (GitHub repo, Linear project, `.claude/`, then registers via `/add-project`) |
 
-### Agent Operations
+### Agent Operations (used by peer sessions working on tickets)
 | Skill | Purpose |
 |-------|---------|
-| `/ticket-agent` | Decision framework for autonomous ticket agents |
-| `/coding-project-lead` | Decision framework for per-product project lead agents |
-| `/task-retro` | Per-task retrospective after a task completes |
-| `/debug-agent-issues` | Investigate unexpected agent behavior |
-| `/ship-it` | Post-implementation pipeline: code review, PR, CI monitoring |
+| `/ticket-agent` | Decision framework for autonomous ticket work in a peer session; reports to the conductor via claude-hive |
+| `/ship-it` | Post-implementation pipeline: code review, PR, CI monitoring, Copilot review |
 
 ### Cross-Project
 | Skill | Purpose |
 |-------|---------|
-| `/aggregate` | Pull learnings and retros from all registered projects |
-| `/cross-project-review` | Weekly review across all products — find patterns, share learnings |
+| `/aggregate` | Pull learnings and retros from all registered projects, identify cross-cutting patterns |
 | `/propagate` | Compare projects against templates, push approved updates via PRs |
 | `/research` | Research a pain point or desired outcome |
 | `/retro` | Meta-level retrospective on this project's sessions |

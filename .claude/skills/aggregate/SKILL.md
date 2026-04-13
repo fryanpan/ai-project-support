@@ -35,7 +35,14 @@ Pull learnings and retro insights from all projects in `registry.yaml` into `doc
    - [Specific learning or insight]
    ```
 
-6. **Identify cross-cutting patterns** — learnings that appear in multiple projects or that would benefit all projects. Add these to a "Cross-Cutting Patterns" subsection of the new date section with:
+6. **Identify cross-cutting patterns** — learnings that appear in multiple projects or that would benefit all projects. Use these prompts when scanning across projects:
+
+   - **Recurring failures:** Is the same kind of error showing up in multiple projects? Fix it once — in the generic skill, template, or rule — rather than project-by-project.
+   - **Slow tasks:** What made some tasks drag? Missing context, ambiguous requirements, bad tooling choices? Update the relevant skill to surface the gap earlier.
+   - **Successful patterns:** What kinds of work consistently go well? Document what made them work so other projects can lean on the same approach.
+   - **Skill gaps:** Are peers frequently deferring or bouncing things back to the user that they should be able to handle? The skill definition is probably too vague — tighten it.
+
+   Add findings to a "Cross-Cutting Patterns" subsection of the new date section with:
    - The pattern description
    - Which projects it was observed in
    - Whether it should be propagated (and how — skill update, CLAUDE.md update, etc.)
