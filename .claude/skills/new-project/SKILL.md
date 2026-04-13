@@ -16,15 +16,14 @@ Create a fully set up project from scratch — GitHub repo, Linear project, Clau
    - **Linear team** — use existing team or create a new one? List available teams from `mcp__linear-server__list_teams`
    - **Visibility** — public or private GitHub repo?
 
-2. **Create GitHub repo**:
-   - Use `mcp__github__create_repository` with the project name and description
-   - Set visibility as specified
-   - Note the repo URL for later
+2. **Create GitHub repo** (use `gh` CLI — the GitHub MCP plugin is unreliable per `docs/process/learnings.md`):
+   - Run: `gh repo create <owner>/<project-name> --<visibility> --description "<one-line>" --clone=false`
+   - Note the repo URL (`https://github.com/<owner>/<project-name>`) for later
 
-3. **Set up Linear**:
-   - If using existing team: note the team ID
-   - If creating new team: use `mcp__linear-server__create_project` (or ask user to create the team manually if the API doesn't support team creation)
-   - Create initial milestone or project for the first sprint
+3. **Set up Linear** (via the Linear MCP plugin if authenticated; tool names vary by install):
+   - If using an existing team: note the team ID from the user or the Linear UI
+   - If creating a new Linear project: use whichever `create_project` tool is available on the Linear MCP, or ask the user to create it manually in the Linear UI and paste the team key back
+   - Record the Linear project name + team key — you'll need them in step 6 when you register the project
 
 4. **Scaffold files from templates**:
 
@@ -42,20 +41,21 @@ Create a fully set up project from scratch — GitHub repo, Linear project, Clau
    - **`docs/product/decisions.md`** — from template
    - **`docs/product/vision.md`** — from template, fill in placeholders
 
-5. **Push scaffold to GitHub**:
-   - Use `mcp__github__push_files` to push all scaffolded files to the `main` branch
-   - Commit message: "Initial project scaffold from project-support templates"
-   - **If `push_files` returns 404**: the repo has no commits yet and no default branch. Workaround: clone the repo locally (`git clone <url> /tmp/<name>`), write all files there, make an empty init commit, and push. Then use the local clone for all remaining file operations in this session.
+5. **Push scaffold to GitHub** (use local `git`, not the GitHub MCP):
+   - Clone the empty repo locally to its permanent home: `git clone git@github.com:<owner>/<project-name>.git ~/dev/<project-name>`
+   - Write all scaffolded files into the local clone using the customized template content from step 4
+   - `git add -A && git commit -m "Initial project scaffold from ai-project-support templates" && git push origin main`
+   - The local clone at `~/dev/<project-name>` becomes the permanent home for the project — subsequent steps and future sessions read from this path.
 
-6. **Add to registry**:
-   - Append the new project to `registry.yaml` (in the main worktree at `~/dev/project-support/registry.yaml`) with path, repo, and Linear info
-   - Do NOT commit — `registry.yaml` is gitignored and private, lives only in the main worktree
+6. **Register the project** — invoke the `/add-project` skill to append the new project to `registry.yaml`. That skill handles path verification, append, and the "do not commit" guidance. All inputs (name, local path, GitHub repo, Linear team) are already gathered from steps 1–3.
 
 7. **Print setup instructions** for the user:
    ```
-   Project created! Next steps:
-   1. Clone: git clone git@github.com:your-username/{project-name}.git ~/dev/{project-name}
-   2. Open in Conductor to start a workspace
+   Project created! Local clone at ~/dev/{project-name}, registered in registry.yaml.
+
+   Next steps:
+   1. cd ~/dev/{project-name}
+   2. Start a Claude Code session in the repo so the conductor can reach it via claude-hive
    3. Start planning your first feature (use plan mode for non-trivial work)
    ```
 
