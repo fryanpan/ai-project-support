@@ -27,7 +27,6 @@ Each project has 2-5 active Conductor worktrees. The metaproject always reads fr
 |-------|---------|
 | `/conductor` | Coordinate peer Claude Code sessions across managed products via claude-hive |
 | `/add-project` | Append an existing repo to `registry.yaml` |
-| `/registry` | List, verify, update, and remove products from the registry |
 | `/new-project` | Scaffold a new project from scratch (GitHub repo, Linear project, `.claude/`, then registers via `/add-project`) |
 
 ### Agent Operations (used by peer sessions working on tickets)

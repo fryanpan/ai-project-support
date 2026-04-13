@@ -74,8 +74,8 @@ When delegating to another session (via `mcp__claude-hive__send_message`, Agent 
 
 The session you're delegating to has local context you don't: which work is already in flight, where its user prefers storage now, what the user agreed to recently in-session, which leads/entities have already been evaluated. When you over-specify solutions, you override that local knowledge with stale assumptions.
 
-**Bad:** "Pull JDs for these 4 roles (links below) and draft cover-letter openers committed to `applications/2026-04-17/`"
-**Good:** "Bryan has a job-apply block Friday. His ranking framework and lead database live in your Notion. Help him walk in ready to submit the highest-priority leads."
+**Bad:** "Edit `src/auth/login.ts`, change the session timeout from 30min to 24h, update the test in `src/auth/login.test.ts`, and commit as `feat(auth): extend session timeout`."
+**Good:** "Users are getting logged out too aggressively. Make the session last long enough that a normal workday doesn't boot them. The peer knows the auth module and the repo's commit conventions."
 
 The good version lets the peer check its own tools, apply its own framework, flag mismatches, and choose its own storage location. The bad version forces mechanical execution even when the premise is wrong — and silently bypasses any work the peer had already done.
 
