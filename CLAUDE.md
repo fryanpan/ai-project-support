@@ -28,6 +28,7 @@ Each project has 2-5 active Conductor worktrees. The metaproject always reads fr
 | `/conductor` | Coordinate peer Claude Code sessions across managed products via claude-hive |
 | `/add-project` | Append an existing repo to `registry.yaml` |
 | `/new-project` | Scaffold a new project from scratch (GitHub repo, Linear project, `.claude/`, then registers via `/add-project`) |
+| `/respawn-sessions` | Re-open all long-running Claude Code sessions in iTerm tabs based on `registry.yaml` (`respawn: true` projects). Used manually after a Mac reboot or whenever sessions need to be rebuilt. |
 
 ### Agent Operations (used by peer sessions working on tickets)
 | Skill | Purpose |
