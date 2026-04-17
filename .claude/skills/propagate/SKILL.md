@@ -71,7 +71,15 @@ Compare projects against `templates/` and push approved updates via GitHub PRs.
      - Body: Lists each change with rationale, notes preserved customizations
    - Clean up the worktree: `git -C <project-path> worktree remove <worktree-path>`
 
-10. **Open all PRs for review**: After all PRs are created, open each PR URL in the browser using `open <url>` so the user can review them.
+10. **Hand off to each project's agent for review and merge.** Don't open PRs in the user's browser — the user shouldn't be the reviewer. The project's running agent has the project context and reviews its own PR.
+
+    For each PR:
+    - Look up the project's stable_id (from `registry.yaml` or via `mcp__claude-hive__list_peers`)
+    - Send a hive message with: the PR URL, what changed, and the merge protocol — review the diff, merge when ready (admin merge OK for trivial template propagation), pull main, run `/reload-plugins` if a new skill or plugin was added (project-level skills are read on demand so a `git pull` is enough; only `/reload-plugins` if `enabledPlugins` changed)
+    - Stagger sends ~5s apart per the broadcast rule
+    - Don't restart sessions. Each agent stays in place and picks up changes via the merge.
+
+    The agent replies when merged + pulled. The user only gets pulled in if the agent flags a problem.
 
 11. **Log to `docs/process/propagation-log.md`**: Append an entry with:
     ```markdown
