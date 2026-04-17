@@ -218,8 +218,32 @@ def escape_for_applescript(s: str) -> str:
     return s.replace("\\", "\\\\").replace('"', '\\"')
 
 
+def has_prior_session(path: str) -> bool:
+    """Return True if Claude Code has any prior transcript for this project path.
+
+    Claude Code stores transcripts at ~/.claude/projects/<encoded-path>/*.jsonl
+    where <encoded-path> replaces /, _, . with - in the absolute path.
+    If the directory doesn't exist or is empty of JSONL files, no prior session
+    exists and `claude --continue` would fail (or worse, attach to nothing).
+    """
+    encoded = path.replace("/", "-").replace("_", "-").replace(".", "-")
+    transcript_dir = os.path.join(
+        os.path.expanduser("~"), ".claude", "projects", encoded,
+    )
+    if not os.path.isdir(transcript_dir):
+        return False
+    for entry in os.listdir(transcript_dir):
+        if entry.endswith(".jsonl"):
+            return True
+    return False
+
+
 def spawn_session(session_name: str, path: str) -> None:
-    """Open a fresh iTerm tab (or window if iTerm has none) and run claude --continue in it.
+    """Open a fresh iTerm tab (or window if iTerm has none) and run claude in it.
+
+    Uses `claude --continue` if the project has a prior session; plain `claude`
+    for first-time startup. `--continue` doesn't work without an existing
+    transcript.
 
     CRITICAL: this function must ALWAYS create a new session container before
     writing text. Earlier versions had a branch that wrote into iTerm's
@@ -228,7 +252,8 @@ def spawn_session(session_name: str, path: str) -> None:
     message to that tab's claude conversation. Never write to current session
     without first creating a new tab.
     """
-    cmd = f'cd "{path}" && claude --continue'
+    claude_cmd = "claude --continue" if has_prior_session(path) else "claude"
+    cmd = f'cd "{path}" && {claude_cmd}'
     script = f'''
 tell application "iTerm"
   activate
