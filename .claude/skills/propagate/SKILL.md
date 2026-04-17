@@ -75,7 +75,9 @@ Compare projects against `templates/` and push approved updates via GitHub PRs.
 
     For each PR:
     - Look up the project's stable_id (from `registry.yaml` or via `mcp__claude-hive__list_peers`)
-    - Send a hive message with: the PR URL, what changed, and the merge protocol — review the diff, merge when ready (admin merge OK for trivial template propagation), pull main, run `/reload-plugins` if a new skill or plugin was added (project-level skills are read on demand so a `git pull` is enough; only `/reload-plugins` if `enabledPlugins` changed)
+    - Send a hive message with the PR URL and what changed
+    - **Tell the agent WHAT to do, not HOW.** "Review the diff and merge when ready using whatever merge mode your project conventions allow." Do NOT instruct them to use `--admin`. Admin-merge bypasses branch protection on the default branch, which the safety system flags as high-severity and triggers the agent to ask the user for explicit authorization. That defeats the auto-merge protocol. Let each agent pick the right merge mode for its repo (regular `gh pr merge --squash`, `--auto` for CI-gated, or escalate to the user only if the project genuinely requires human review for any merge).
+    - Then they pull main and run `/reload-plugins` if `enabledPlugins` changed (project-level skills are read on demand — a `git pull` is enough)
     - Stagger sends ~5s apart per the broadcast rule
     - Don't restart sessions. Each agent stays in place and picks up changes via the merge.
 
