@@ -35,7 +35,7 @@ from typing import Dict, List, Set, Tuple
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.normpath(os.path.join(SCRIPT_DIR, "..", "..", ".."))
 REGISTRY_PATH = os.path.join(REPO_ROOT, "registry.yaml")
-TAB_SPAWN_DELAY_SEC = 1.0
+TAB_SPAWN_DELAY_SEC = 5.0  # Space session boots out — concurrent Opus context loads hit rate limits.
 ITERM_BOOT_DELAY_SEC = 2.0
 LSOF_TIMEOUT_SEC = 5.0
 PS_TIMEOUT_SEC = 5.0

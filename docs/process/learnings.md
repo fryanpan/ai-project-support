@@ -84,6 +84,14 @@ Technical discoveries that should persist across sessions.
 - Subagents dispatched via the `Agent` tool do NOT inherit the parent's custom MCP servers. Use standard tools (`gh pr checks` via Bash) for CI status inside subagents.
 - Keep total `alwaysApply: true` rule content in a repo under ~80 lines — it multiplies across every turn.
 
+## Peer Session Administration
+- The conductor can kill and respawn peer sessions without user intervention. Recipe:
+  1. Find the claude PID: `lsof -a -d cwd -Fpn` to find processes with the project dir as cwd, then `ps -p <pids> -o pid=,command=` to confirm which is the `claude` process
+  2. `kill <pid>` to stop it
+  3. Run `respawn.py --execute` to relaunch — it detects the gap and spawns only the missing session
+- Use this when a peer needs a restart (e.g., to pick up new env vars via direnv, or after config changes to `.claude/discord/` or `.claude/settings.json`)
+- Orphaned MCP server processes (bun running claude-hive-mcp/server.ts, reparented to PID 1) can accumulate when subagents exit without reaping children. Periodic sweep: `ps aux | grep 'claude-hive-mcp/server.ts' | grep -v grep | awk '{print $2}' | xargs kill`
+
 ## When to Ask vs When to Act
 - **Default to action, not questions.** When the user delegates, they expect work to start, not a questionnaire. The bar for asking is high.
 - Only ask if BOTH: (1) genuinely ambiguous about WHAT to do (not HOW), and (2) cannot be determined by reading the code, comments, or linked docs.

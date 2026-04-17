@@ -44,6 +44,7 @@ Each project has 2-5 active Conductor worktrees. The metaproject always reads fr
 | `/research` | Research a pain point or desired outcome |
 | `/retro` | Meta-level retrospective on this project's sessions |
 | `/persist-plan` | Persist an internal plan to `docs/product/plans/` |
+| `/ux-review` | Walk a UI feature as a real user before shipping it. Identifies cognitive friction (confusion, dead-ends, wrong-target clicks) and reports with severity. Breaks the rework loop. |
 
 ## Key Directories
 

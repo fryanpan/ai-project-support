@@ -3,6 +3,9 @@ docs/process/retrospective.md
 docs/process/propagation-log.md
 .context/
 .worktrees/
+.claude/worktrees/
 .venv/
 __pycache__/
 .pytest_cache/
+.envrc
+.claude/discord/
