@@ -2,6 +2,100 @@
 
 History of `/aggregate` passes. Each section records what was found and synthesized in that run.
 
+Project names are abstracted (this log is in a public repo). Use category labels: "personal-CRM-style project", "family-bike-routing project", "personal-finance project", etc.
+
+---
+
+## 2026-04-29 — W1+W2 aggregation
+
+Covers 2026-04-13 → 2026-04-29 across all registered projects. Six projects contributed material learnings or retros in this window. The remaining ~12 projects had no new entries (most older personal projects haven't been actively touched; three brand-new scaffolds — live-feedback-plugin, weekly-review, ux-review-plugin — only have placeholder learnings/retro files).
+
+The two booster (advisory) project worktrees (~/dev/crabgrass-frontend, ~/dev/crabgrass-backend) and the bike-tool worktree (~/dev/bike-tool) were not present locally — couldn't pull or read. Bike-tool is now superseded by the family-bike-routing project anyway (per 2026-04-13 aggregation note about duplication); the booster engagement is paused.
+
+### personal-CRM-style project
+- 2026-04-17 [Silent data corruption] — When navigation silently fails (returns False, or `page.goto("")` no-ops), Playwright `page.evaluate` happily captures whatever page is currently loaded — typically the operator's own profile/feed left over from a warmup browse. Combined with a correct downstream key (`linkedin_url` index), the wrong-person data was PATCHed onto the right Notion entries — five entries silently corrupted in production before manual restore. Root cause: `_get_url` accepted both `"url"` and `"linkedin_url"`, but `navigation.py` only read `"url"`. Always verify `page.url` matches expected slug before extraction; treat boolean returns as load-bearing; share helpers for input-key normalization across modules.
+
+### family-bike-routing project
+- W1 [Routing graph correctness] — `findNearestNode` on a directed graph must be role-aware AND reachability-aware. Snapping to the geometrically nearest node fails ~23% of route pairs (41% in SF) because (a) end-snap can land on the upstream terminus of a one-way (zero incoming) and (b) some nodes sit on tiny directed islands not reachable from start. Fix: pass `role: 'start' | 'end'`, require outgoing-for-start / incoming-for-end, AND pre-compute directed-reachable BFS set from start to restrict end-snap. Cap snap distance at 1km to preserve disconnected-graph contract.
+- W1 [Mode rule design] — Stamina is orthogonal to safety; don't conflate `maxContinuousKm` with infrastructure quality. Bike-priority infra (Fahrradstraße, SF Slow Streets, living streets) must be excluded from the "shared-surface" caution slowdown, otherwise the router detours onto cycleways at full speed to escape Fahrradstraßen at 5 km/h. Hard-rejected edges should become bridge-walks (added back at walking speed with `isWalking: true`), not drops — A* needs graph connectivity even through stressful infrastructure.
+- W1 [Spec invariants] — Kid-confident must be a strict surface superset of kid-starting-out. When the display classifier flagged `paving_stones` as rough for confident but fine for starting-out, users perceived it as "confident sees less preferred infra than starting-out" — opposite of intended hierarchy. Monotonicity invariants ("as skill increases, accepted set grows") should be tested explicitly.
+- W1 [OSM data sparsity] — `width` / `est_width` / `lanes` on cycleways are too sparsely tagged to act on. Single-digit % of Berlin cycleways have a `width=*` tag. A width filter would only catch the minority that ARE tagged narrow, creating visible inconsistency. Decision: don't read width in router; revisit only if OSM coverage materially improves.
+- W1 [Display vs routing classifier] — Two parallel classifiers drift silently; one source of truth (`classifyEdge` for routing, `classifyOsmTagsToItem` for display) is required. Speed-based costs (`distance / speed`) beat arbitrary penalty multipliers — they naturally make walking bridges expensive without special-case logic, and compose cleanly with multimodal routing.
+- W1 [Stacked PRs] — Squash-merging the base of a stacked PR makes the stacked PR DIRTY. GitHub sees the squash commit on main as a new SHA, doesn't match the original commits in the stacked branch, reports conflicts. Fix: merge `origin/main` into the stacked branch, `git checkout --ours` to resolve (stacked branch supersedes the squashed base by definition), commit the merge, push.
+- W2 [Frozen artifacts] — When public content (launch blog post) pins to versioned screenshot URLs, document the frozen-folder rule in learnings so future cleanup passes don't thin them out. Future runs naturally write to fresh dated folders, so the policy is "leave alone" not "rebuild."
+
+### personal-finance project
+- W2 [Tax — IRA aggregation rule] — Form 8606 pro-rata aggregates ALL Traditional + Rollover + SEP + SIMPLE IRAs across ALL institutions on Dec 31, not just one account. Always confirm year-end balance is $0 across every IRA before declaring a "clean" backdoor.
+- W2 [Tax — donation lot reconciliation] — 1099-B doesn't capture cost basis for charitable stock donations (gifts aren't sold). Etrade's donation confirmation only shows position-wide AVERAGE price. Always download portfolio lot CSVs BOTH before and immediately after each donation; reconciling the two snapshots reveals exactly which lots were donated even when "specific tax lot selected" was used.
+- W2 [Tax — kiddie tax + trust TIN] — A "FBO" (for benefit of) account can use beneficiary's SSN (income → kiddie tax) OR a trust EIN (trust files 1041; only K-1 distributions hit beneficiary). Always check recipient TIN on the 1099 before deciding. Irrevocable non-grantor trusts file their own 1041 — kiddie tax only applies to amounts distributed via K-1.
+
+### research-notes project
+- W1 [Scheduling] — `/schedule` skill and `RemoteTrigger` tool both require claude.ai account auth (not API key auth) — run `/login` first. `CronCreate` is session-local only (dies when session ends) — not suitable for daily tasks. For persistent daily automation: GitHub Actions cron or `/schedule` after login.
+
+### conductor / metaproject
+- W1 [Peer session administration] — The conductor can kill and respawn peer sessions without user intervention. Recipe: `lsof -a -d cwd -Fpn` to find processes by cwd, confirm which is `claude` via `ps`, kill, then `respawn.py --execute` (detects gap, spawns missing). Useful for picking up new env vars via direnv or after settings/discord config changes.
+- W1 [Orphaned MCP servers] — Bun processes running claude-hive-mcp/server.ts can accumulate when subagents exit without reaping children (reparented to PID 1). Periodic sweep: `ps aux | grep 'claude-hive-mcp/server.ts' | grep -v grep | awk '{print $2}' | xargs kill`.
+
+### Cross-Cutting Patterns
+
+#### Silent wrong-target writes (verify-after-action)
+
+**Observed in:** personal-CRM-style project (silent wrong-page capture writing to correct Notion index — 5 entries corrupted), family-bike-routing project (router snapping to wrong directed island; bike-priority infra detour from speed-cap bug; kid-confident surface inversion). Also already-known from 2026-02 personal-CRM-style ("verify after slug match").
+
+**Description:** Multiple projects this window hit silent-corruption-class bugs where the action took effect on a wrong target without raising an error. The unifying failure mode: the system kept going past a soft failure (empty URL, missing edge, mismatched classifier output), and the side-effect landed on the right index/key with the wrong payload. Tests against fixtures pass; tests against live data catch it.
+
+**Reconciliation:** Existing `templates/rules/workflow-conventions.md` has a "live-data smoke test before handoff" pattern (from 2026-02-24 aggregation). The 2026-04-13 aggregation also flagged "Verify after slug match" as a personal-CRM-specific learning. The recurrence here suggests promoting it to a generic principle.
+
+**Propagation:** **Hold for now — no obvious template change.** The principle is "verify the side-effect target after the action and treat boolean returns as load-bearing." That's project-shaped advice, hard to template generically. Better path: add to `learnings.md` in each project that does mutate-by-key (personal-CRM-style, blog-assistant, family-bike-routing) when relevant, and let the in-project review catch it. Re-evaluate next aggregation if it shows up in a third unrelated project.
+
+---
+
+#### Monotonicity / superset invariants in user-facing classifications
+
+**Observed in:** family-bike-routing project (kid-confident must be surface superset of kid-starting-out — paving_stones inversion bug).
+
+**Description:** When a UI exposes a tiered system (skill levels, severity tiers, access levels), the user's mental model is "higher tier = strict superset of lower tier." Breaking that invariant in the classifier creates visible-but-confusing inversions (toggling skill UP made things worse). Single project so far, but the pattern is general — anywhere a project has tiered classifications, an explicit monotonicity test is cheap insurance.
+
+**Propagation:** **Single-project observation, hold.** Re-evaluate if it shows up in a second project (e.g., personal-finance risk tiers, health-tool symptom severity tiers).
+
+---
+
+#### Sparse-data filters create more harm than benefit
+
+**Observed in:** family-bike-routing project (OSM `width` / `lanes` / `est_width` on cycleways too sparse to filter on).
+
+**Description:** When an attribute is tagged on <10% of items, filtering on it creates visible inconsistency ("this 1.2m path is rejected but that unmarked one is fine?") with very little real impact on the output. Better to skip the filter entirely and revisit when coverage improves. Generalizable beyond OSM (e.g., user-tagged metadata in personal-CRM, optional fields in any data system).
+
+**Propagation:** **Single-project observation, hold.** Worth adding to a future "data quality" rules section if it recurs.
+
+---
+
+#### Plugin scaffolding spawned without substantive learnings yet
+
+**Observed in:** claude-live-feedback-plugin (initial scaffold 2026-04-17), weekly-review (initial scaffold 2026-04-19), ux-review-plugin (initial scaffold 2026-04-20).
+
+**Description:** Three brand-new projects scaffolded from `templates/` in W2. All three have empty learnings.md / retrospective.md placeholders. Means the scaffolding workflow itself is being exercised heavily — the conductor's `/new-project` and template propagation are now the predominant activity, more than substantive cross-project pattern emergence.
+
+**Propagation:** **No action — informational.** Worth tracking whether these projects produce substantive learnings in the next 2-week window or stay placeholder-only. If empty placeholders persist >2 aggregation cycles, consider whether the placeholder structure is too low-signal for the new-project flow.
+
+---
+
+### Recommendations for `/propagate`
+
+**Nothing to propagate this cycle.** All cross-cutting patterns are either single-project observations or already-addressed by existing templates/plugins:
+
+- "Verify after action" / silent wrong-target — already addressed in spirit by `templates/rules/workflow-conventions.md` live-data testing requirement; the new instances are project-specific shapes.
+- Monotonicity invariants and sparse-data filters — single-project, not yet patterns.
+- The `/ux-review` skill (propagated 2026-04-17) appears to be working — projects that touched UI in W2 (family-bike-routing) used it informally, no rework loops surfaced in retros.
+
+The action this cycle is to **continue scaffolding the three new projects** through normal template propagation channels, not to push anything new out.
+
+### Notes on coverage gaps
+
+- **bike-tool** (~/dev/bike-tool): worktree not present locally. Now superseded by family-bike-routing per 2026-04-13 aggregation note. Consider removing from registry if it's truly retired.
+- **booster-frontend / booster-backend**: worktrees not present locally; advisory engagement appears paused. Skip until re-engaged.
+- **health-tool, openclaw-config, tasks, givewell-impact, blog-assistant, octoturtle-assistant, product-engineer, job-search, rare-disease-benchmark**: no new learnings or retros in window. These projects either weren't touched or didn't produce capturable learnings; nothing missed.
+
 ---
 
 ## 2026-04-13
